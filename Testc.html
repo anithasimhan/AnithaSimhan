@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C-Ahead · UX Case Study</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&family=Cabinet+Grotesk:wght@300;400;500;700&family=Instrument+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+
+/* Brand palette */
+  --navy:    #000048;   /* primary dark — white text on top */
+  --blue-lt: #EBF1FF;   /* light blue surface — navy text on top */
+  --grey-lt: #EFEFEF;   /* light grey surface — navy text on top */
+  --white:   #ffffff;
+
+  /* Derived accessible tones */
+  --navy-mid: #00006a;       /* slightly lifted navy for hover */
+  --navy-text-on-light: #000048;   /* navy on EBF1FF / EFEFEF — contrast ~9:1 ✓ */
+  --muted-on-light: #3a3a6e;       /* medium navy, contrast ~5:1 on light BGs ✓ */
+  --muted-on-dark:  rgba(235,241,255,0.6);  /* on --navy surfaces */
+  --rule-light: rgba(0,0,72,0.12);
+  --rule-dark:  rgba(235,241,255,0.15);
+  --accent:  #1a44c8;    /* vivid blue accent — AA on white/grey ✓ */
+  --accent-lt: #d0dcff;  /* pale accent tint */
+
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans:  'Cabinet Grotesk', sans-serif;
+  --mono:  'Instrument Mono', monospace;
+
+  /* Centered layout: equal left/right gutter */
+  --pad: 24px;
+  --col: 1080px;
+  --gutter: max(var(--pad), calc((100% - var(--col)) / 2));
+}
+
+.pov{font-family:'Outfit',sans-serif;background:#0D1A40;padding:56px var(--gutter);position:relative;overflow:hidden;}
+.pov::before{content:'';position:absolute;top:-100px;right:-100px;width:420px;height:420px;background:radial-gradient(circle,rgba(75,145,247,0.11) 0%,transparent 65%);border-radius:50%;pointer-events:none;}
+.pov-inner{max-width:none;margin:0 auto;position:relative;z-index:1;}
+.pov-top{margin-bottom:40px;}
+.pov-chip{display:inline-block;background:rgba(75,145,247,0.14);color:#4B91F7;font-size: 13px;font-weight:600;padding:4px 12px;border-radius:20px;border:1px solid rgba(75,145,247,0.25);margin-bottom:12px;}
+.pov-title{font-family:'Cormorant Garamond',serif;font-size:clamp(24px,3.5vw,36px);color:#fff;line-height:1.1;margin-bottom:10px;}
+.pov-title em{color:#4B91F7;font-style:italic;}
+.pov-sub{font-size:14px;color:rgba(255,255,255,0.46);line-height:1.65;max-width:580px;font-weight:300;}
+.pov-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;}
+.pov-card{background:#0A1530;border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:28px 24px;}
+.pov-card-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+.pov-card-num{font-family:'Cormorant Garamond',serif;font-size:13px;color:#4B91F7;min-width:26px;}
+.pov-card-label{font-size: 13px;font-weight:700;color:#4B91F7;}
+.pov-card-line{flex:1;height:1px;background:rgba(75,145,247,0.2);}
+.pov-card-text{font-size:13.5px;color:rgba(255,255,255,0.58);line-height:1.75;}
+.pov-footer{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.pov-stats{display:flex;gap:28px;}
+.pov-stat-num{font-family:'Cormorant Garamond',serif;font-size:22px;color:#4B91F7;line-height:1;}
+.pov-stat-label{font-size:13px;color:rgba(255,255,255,0.3);margin-top:2px;}
+.pov-pills{display:flex;flex-wrap:wrap;gap:7px;}
+.pov-pill{font-size:13px;padding:4px 12px;border-radius:100px;background:rgba(75,145,247,0.08);border:1px solid rgba(75,145,247,0.2);color:#4B91F7;}
+@media(max-width:640px){.pov{padding-top:40px;padding-bottom:40px;}.pov-cards{grid-template-columns:1fr;}.pov-footer{flex-direction:column;align-items:flex-start;}}
+  
+  
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); background: var(--grey-lt); color: var(--navy-text-on-light); line-height: 1.6; overflow-x: hidden; }
+
+/* ── NAV ── */
+.nav {
+  position: sticky; top: 0; z-index: 200;
+  background: var(--navy);
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0 56px; height: 52px;
+  border-bottom: 1px solid var(--rule-dark);
+}
+.nav-brand { font-family: var(--sans); font-size: 12px; color: var(--white); font-weight: 600;}
+.nav-links { display: flex; gap: 32px; }
+.nav-links a { font-family: var(--sans); font-size: 13px; color: var(--muted-on-dark); text-decoration: none; transition: color 0.2s; font-weight: 600;}
+.nav-links a:hover { color: var(--white); }
+.nav-tag { font-family: var(--sans); font-size: 13px; color: var(--accent-lt); font-weight: 600;}
+
+/* ── HERO ── */
+.hero {
+  display: block;
+  min-height: 88vh;
+  border-bottom: 1px solid var(--rule-light);
+}
+.hero-l {
+  padding: 72px 56px;
+  display: block;
+  border-right: 1px solid var(--rule-light);
+  background: var(--blue-lt);
+}
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--sans); font-size: 13px; color: var(--accent); margin-bottom: 36px; font-weight: 600;}
+.hero-tag::before { content: ''; width: 32px; height: 1.5px; background: var(--accent); }
+.hero-h1 {
+  font-family: var(--serif); font-size: clamp(56px, 7vw, 100px);
+  line-height: 0.92; letter-spacing: -0.02em; color: var(--navy);
+  margin-bottom: 32px;
+}
+.hero-h1 em { font-style: italic; color: var(--accent); }
+.hero-sub {
+  font-size: 16px; line-height: 1.75; color: var(--muted-on-light); max-width: 420px; margin-bottom: 48px;
+}
+.hero-meta-bar {
+  border-top: 1px solid var(--rule-light); padding-top: 28px;
+  display: flex; gap: 40px; flex-wrap: wrap;
+}
+.meta-chip .label { font-family: var(--sans); font-size: 13px; color: var(--muted-on-light); display: block; margin-bottom: 5px; font-weight: 600;}
+.meta-chip .value { font-family: var(--sans); font-size: 13px; font-weight: 500; color: var(--navy); }
+
+/* Hero right — navy bg */
+.hero-r {
+  background: var(--navy);
+  padding: 72px 56px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  position: relative; overflow: hidden;
+}
+.hero-r::before {
+  content: 'C'; font-family: var(--serif); font-size: 500px; font-weight: 700;
+  color: rgba(235,241,255,0.05); position: absolute; top: -80px; right: -60px;
+  line-height: 1; pointer-events: none;
+}
+.hero-r-head { font-family: var(--sans); font-size: 13px; color: var(--muted-on-dark); margin-bottom: 40px; font-weight: 600;}
+.hero-big-text {
+  font-family: var(--serif); font-style: italic; font-size: clamp(24px, 3vw, 36px);
+  color: var(--blue-lt); line-height: 1.35; max-width: 340px; opacity: 0.85;
+}
+.hero-big-text strong { color: var(--white); font-style: normal; opacity: 1; }
+.stats-block {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+  border: 1px solid var(--rule-dark); margin-top: 48px;
+}
+.stat-box {
+  padding: 28px 24px;
+  border-right: 1px solid var(--rule-dark);
+  border-bottom: 1px solid var(--rule-dark);
+}
+.stat-box:nth-child(2n) { border-right: none; }
+.stat-box:nth-child(3), .stat-box:nth-child(4) { border-bottom: none; }
+.stat-n { font-family: var(--serif); font-size: 48px; font-weight: 700; color: var(--white); line-height: 1; }
+.stat-l { font-family: var(--sans); font-size: 13px; color: var(--muted-on-dark); margin-top: 6px; font-weight: 600;}
+
+/* ── DIVIDER LABEL ── */
+.divider-label{
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted-on-light);
+  padding: 20px var(--gutter);
+  background: var(--grey-lt);
+  border-bottom: none;          /* removes the line below the label row */
+}
+
+/* keep this: the line after the section text */
+.divider-label::after{
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--rule-light);
+}
+
+/* ── SECTIONS ── */
+.sec { padding: 80px var(--gutter); border-bottom: none solid var(--rule-light); }
+.sec-head {
+  font-family: var(--serif); font-size: clamp(38px, 5vw, 64px);
+  line-height: 1.0; letter-spacing: -0.02em; margin-bottom: 48px; color: var(--navy);
+}
+.sec-head em { font-style: italic; color: var(--accent); }
+
+/* ── PROBLEM ── */
+.ask-intro {
+  font-size: 16px; line-height: 1.85; color: var(--muted-on-light); max-width: 760px; margin-bottom: 56px;
+  border-left: 3px solid var(--accent); padding-left: 24px;
+}
+.ask-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.ask-card {
+  padding: 44px 36px; border: 1px solid var(--rule-light); border-radius: 14px;
+  position: relative; background: var(--white);
+}
+.ask-num {
+  font-family: var(--serif); font-size: 80px; font-weight: 700; color: var(--navy); opacity: 0.06;
+  line-height: 1; position: absolute; top: 16px; right: 20px;
+}
+.ask-badge {
+  display: inline-block; font-family: var(--sans); font-size: 13px; background: var(--navy); color: var(--white); padding: 4px 10px; margin-bottom: 18px; border-radius: 6px; font-weight: 600;}
+.ask-card h3 { font-family: var(--serif); font-size: 26px; font-weight: 700; margin-bottom: 12px; line-height: 1.2; color: var(--navy); }
+.ask-card p { font-size: 14px; line-height: 1.7; color: var(--muted-on-light); }
+
+/* ── SOLUTION ── */
+.solution-sec { background: var(--navy); border-bottom: 1px solid var(--rule-light); }
+.solution-sec .sec-head { color: var(--white); }
+.solution-sec .sec-head em { color: var(--accent-lt); }
+.solution-body {
+  font-size: 17px; line-height: 1.9; color: var(--muted-on-dark); max-width: 800px; margin-bottom: 48px;
+}
+.solution-pills { display: flex; flex-wrap: wrap; gap: 12px; }
+.pill {
+  font-family: var(--sans); font-size: 13px; border: 1px solid var(--rule-dark); color: var(--blue-lt); padding: 8px 18px; border-radius: 100px;
+  font-weight: 600;}
+
+/* ── RESEARCH ── */
+.research-layout { display: grid; grid-template-columns: 3fr 2fr; gap: 56px; align-items: start; }
+.insight-list { list-style: none; counter-reset: ins; }
+.insight-list li {
+  counter-increment: ins; display: flex; gap: 18px;
+  padding: 22px 0; border-bottom: 1px solid var(--rule-light); align-items: flex-start;
+}
+.insight-list li::before {
+  content: counter(ins, decimal-leading-zero); font-family: var(--sans); font-size: 13px;
+  color: var(--muted-on-light); width: 26px; flex-shrink: 0; margin-top: 2px;
+}
+.insight-list li span { font-size: 16px; line-height: 1.65; font-weight: 300; color: var(--navy-text-on-light); }
+.research-sidebar { display: flex; flex-direction: column; gap: 24px; }
+.r-card { background: var(--navy); color: var(--white); padding: 28px 24px; border-radius: 14px; }
+.r-card .r-num { font-family: 'Outfit', sans-serif; font-size: 52px; font-weight: 700; color: var(--accent-lt); line-height: 1; }
+.r-card .r-label { font-family: var(--sans); font-size: 13px; color: var(--muted-on-dark); margin-top: 6px; font-weight: 600;}
+.r-card .r-sub { font-size: 12px; color: var(--muted-on-dark); margin-top: 8px; line-height: 1.5; }
+.experience-chart { background: var(--white); border: 1px solid var(--rule-light); padding: 24px; border-radius: 14px; }
+.exp-title { font-family: var(--sans); font-size: 13px; color: var(--muted-on-light); margin-bottom: 16px; font-weight: 600;}
+.exp-bar { display: flex; flex-direction: column; gap: 10px; }
+.bar-row { display: flex; align-items: center; gap: 12px; }
+.bar-label { font-family: var(--sans); font-size: 13px; color: var(--muted-on-light); width: 92px; flex-shrink: 0; }
+.bar-track { flex: 1; height: 6px; background: var(--grey-lt); }
+.bar-fill { height: 100%; background: var(--accent); }
+.bar-pct { font-family: var(--sans); font-size: 13px; color: var(--muted-on-light); width: 40px; text-align: right; }
+
+/* ── PERSONAS ── */
+.persona-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 0 var(--gutter) 56px; }
+.persona-card {
+  padding: 52px 44px; border: 1px solid var(--rule-light); border-radius: 14px;
+  position: relative; overflow: hidden; background: var(--white);
+}
+.persona-card:last-child { background: var(--blue-lt); }
+.persona-card::after {
+  content: attr(data-initial); font-family: var(--serif); font-size: 260px; font-weight: 700;
+  color: var(--navy); opacity: 0.04; position: absolute; bottom: -50px; right: -20px;
+  line-height: 1; pointer-events: none;
+}
+.persona-header { display: flex; gap: 20px; align-items: flex-start; margin-bottom: 28px; }
+.persona-avatar {
+  width: 56px; height: 56px; border-radius: 50%; border: 1px solid var(--rule-light);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--serif); font-size: 22px; font-weight: 700; background: var(--blue-lt); color: var(--navy); flex-shrink: 0;
+}
+.persona-role-tag { font-family: var(--sans); font-size: 13px; color: var(--accent); margin-bottom: 4px; font-weight: 600;}
+.persona-name { font-family: var(--serif); font-size: 34px; font-weight: 700; line-height: 1; color: var(--navy); }
+.persona-bio { font-size: 12px; color: var(--muted-on-light); margin-top: 4px; }
+.persona-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 24px; }
+.persona-block-label { font-family: var(--sans); font-size: 13px; color: var(--accent); margin-bottom: 10px; font-weight: 600;}
+.persona-block ul { list-style: none; }
+.persona-block ul li { font-size: 13px; line-height: 1.6; color: var(--muted-on-light); padding: 5px 0; border-bottom: 1px solid var(--rule-light); display: flex; gap: 8px; }
+.persona-block ul li::before { content: '—'; color: var(--navy); flex-shrink: 0; font-size: 11px; margin-top: 2px; }
+
+/* ── SPRINT ── */
+.sprint-sec { background: var(--navy); border-bottom: 1px solid var(--rule-light); }
+.sprint-sec .sec-head { color: var(--white); }
+.sprint-sec .sec-head em { color: var(--accent-lt); }
+.sprint-intro { font-size: 15px; line-height: 1.8; color: var(--muted-on-dark); max-width: 620px; margin-bottom: 56px; }
+.sprint-row { display: flex; border: 1px solid var(--rule-dark); border-radius: 14px; overflow: hidden; }
+.sprint-day {
+  flex: 1; padding: 28px 16px; text-align: center;
+  border-right: 1px solid var(--rule-dark); cursor: default;
+}
+.sprint-day:last-child { border-right: none; }
+.sd-label { font-family: var(--sans); font-size: 13px; color: var(--muted-on-dark); margin-bottom: 10px; font-weight: 600;}
+.sd-title { font-family: var(--serif); font-size: 18px; font-weight: 700; color: var(--white); line-height: 1.2; margin-bottom: 10px; }
+.sd-dot { width: 5px; height: 5px; background: var(--accent-lt); border-radius: 50%; margin: 0 auto; }
+
+/* ── TESTING ── */
+.test-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 0 var(--gutter) 56px; }
+.test-panel { padding: 52px 44px; border: 1px solid var(--rule-light); border-radius: 14px; background: var(--white); }
+.test-panel:last-child { background: var(--blue-lt); }
+.test-tag {
+  display: inline-block; font-family: var(--sans); font-size: 13px; background: var(--navy); color: var(--white); padding: 5px 12px; margin-bottom: 20px; border-radius: 6px; font-weight: 600;}
+.test-round-name { font-family: var(--serif); font-size: 32px; font-weight: 700; margin-bottom: 6px; color: var(--navy); }
+.test-sessions-num { font-family: 'Outfit', sans-serif; font-size: 64px; font-weight: 700; color: var(--accent); line-height: 1; }
+.test-sessions-label { font-family: var(--sans); font-size: 13px; color: var(--muted-on-light); margin-bottom: 24px; font-weight: 600;}
+.test-details-row { display: flex; gap: 32px; margin-bottom: 24px; flex-wrap: wrap; }
+.test-detail-item .td-label { font-family: var(--sans); font-size: 13px; color: var(--muted-on-light); margin-bottom: 4px; font-weight: 600;}
+.test-detail-item .td-val { font-size: 13px; font-weight: 500; color: var(--navy); }
+.gender-bar { display: flex; height: 6px; overflow: hidden; margin-bottom: 6px; }
+.gender-m { background: var(--navy); }
+.gender-f { background: var(--accent); flex: 1; }
+.gender-legend { display: flex; gap: 16px; }
+.gl-item { display: flex; align-items: center; gap: 6px; font-family: var(--sans); font-size: 13px; color: var(--muted-on-light); }
+.gl-dot { width: 8px; height: 8px; border-radius: 50%; }
+.recs-head { font-family: var(--sans); font-size: 13px; color: var(--muted-on-light); margin: 24px 0 12px; border-top: 1px solid var(--rule-light); padding-top: 18px; font-weight: 600;}
+.rec-item { font-size: 13px; line-height: 1.65; color: var(--muted-on-light); padding: 7px 0; border-bottom: 1px solid var(--rule-light); display: flex; gap: 10px; }
+.rec-item::before { content: '→'; color: var(--accent); flex-shrink: 0; }
+
+/* ── OUTCOME ── */
+.outcome-banner {
+  background: var(--navy); color: var(--white);
+  padding: 72px var(--gutter); border-bottom: 1px solid var(--rule-light);
+  display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center;
+}
+.ob-head { font-family: var(--serif); font-size: clamp(38px, 5vw, 60px); font-weight: 700; line-height: 1.05; letter-spacing: -0.02em; color: var(--white); }
+.ob-head em { font-style: italic; color: var(--accent-lt); }
+.ob-desc { font-size: 16px; line-height: 1.85; color: var(--muted-on-dark); }
+.screens-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 32px;
+  background: var(--white);
+  padding: 72px var(--gutter);      /* top + bottom space for the last section */
+}
+.screen-card {
+  display: flex; flex-direction: column;
+  background: var(--white); border: 1px solid var(--rule-light); border-radius: 14px; overflow: hidden;
+}
+.screen-img-wrap {
+  position: relative; overflow: hidden; background: var(--white);
+  border-bottom: 1px solid var(--rule-light);
+}
+.screen-img-wrap img { width: 100%; display: block; }
+.screen-img-overlay { display: none; }
+.screen-info { padding: 28px 32px 36px; background: var(--white); flex: 1; }
+.screen-tag { font-family: var(--sans); font-size: 13px; font-weight: 600; color: var(--accent); margin-bottom: 10px; display: block; }
+.screen-name { font-family: var(--serif); font-size: 26px; font-weight: 700; margin-bottom: 8px; color: var(--navy); line-height: 1.15; }
+.screen-desc { font-size: 14px; line-height: 1.7; color: var(--muted-on-light); }
+
+/* ── FOOTER ── */
+.footer {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 28px 56px; border-top: 1px solid var(--rule-light);
+  background: var(--navy);
+}
+.footer-brand { font-family: var(--serif); font-size: 18px; font-weight: 700; color: var(--white); font-style: italic; }
+.footer-info { font-family: var(--sans); font-size: 13px; color: var(--muted-on-dark); text-align: center; font-weight: 600;}
+.footer-copy { font-family: var(--sans); font-size: 13px; color: var(--muted-on-dark); }
+
+/* ── ANIMATIONS ── */
+@keyframes slideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+.hero-tag     { animation: slideUp 0.5s ease both; }
+.hero-h1      { animation: slideUp 0.6s 0.1s ease both; }
+.hero-sub     { animation: slideUp 0.6s 0.18s ease both; }
+.hero-meta-bar{ animation: slideUp 0.6s 0.24s ease both; }
+.hero-big-text{ animation: slideUp 0.6s 0.12s ease both; }
+.stats-block  { animation: slideUp 0.6s 0.28s ease both; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 960px) {
+  .nav { padding: 0 24px; }
+  .nav-links { display: none; }
+  .hero { grid-template-columns: 1fr; }
+  .hero-l, .hero-r { padding: 48px 24px; }
+  .hero-r { border-top: 1px solid var(--rule-light); }
+  .sec { padding-top: 60px; padding-bottom: 60px; }
+  .divider-label { padding-top: 16px; padding-bottom: 16px; }
+  .ask-grid { grid-template-columns: 1fr; }
+  .research-layout { grid-template-columns: 1fr; }
+  .persona-grid { grid-template-columns: 1fr; }
+  .sprint-row { flex-wrap: wrap; }
+  .sprint-day { min-width: 33%; }
+  .test-grid { grid-template-columns: 1fr; }
+  .outcome-banner { grid-template-columns: 1fr; padding-top: 48px; padding-bottom: 48px; }
+  .screens-grid { grid-template-columns: 1fr; padding-top: 40px; padding-bottom: 40px; }
+  .footer { padding: 24px; flex-wrap: wrap; gap: 12px; justify-content: center; }
+}
+
+  /* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(245,244,240,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 60px;
+  height: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px; font-weight: 700;
+  color: var(--ink); text-decoration: none;
+  letter-spacing: 0.01em;
+}
+.nav-logo span { color: var(--green); }
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a {
+  font-size: 13px; font-weight: 500; letter-spacing: 0.06em;
+  text-transform: uppercase; text-decoration: none;
+  color: var(--muted); transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--green); }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Anitha <span>N.</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Projects</a></li>
+ <li><a href="about.html">More About Me</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+    <br>
+<section class="hero">
+
+  <div class="pov">
+  <div class="pov-inner">
+    <div class="pov-top">
+      <div class="pov-chip">Career Platform · Case Study</div>
+      <div class="pov-title">C-Ahead — <em>Opportunity Search</em></div>
+      <p class="pov-sub">Cognizant's internal career platform redesigned to serve two very different users — Associates searching for opportunities and Hiring Managers allocating candidates — both efficiently, in one system.</p>
+    </div>
+    <div class="pov-cards">
+      <div class="pov-card">
+        <div class="pov-card-header"><span class="pov-card-label">Problem</span><div class="pov-card-line"></div></div>
+        <div class="pov-card-text">Associates couldn't find relevant opportunities due to unclear navigation and limited filters. Hiring Managers struggled to search, allocate, and propose candidates. The experience was inconsistent and required heavy manual effort.</div>
+      </div>
+      <div class="pov-card">
+        <div class="pov-card-header"><span class="pov-card-label">My Role</span><div class="pov-card-line"></div></div>
+        <div class="pov-card-text">End-to-end Experience Designer — research, sprint facilitation, proto-personas, wireframing, UI design, and multi-round usability validation for both user types.</div>
+      </div>
+      <div class="pov-card">
+        <div class="pov-card-header"><span class="pov-card-label">Approach</span><div class="pov-card-line"></div></div>
+        <div class="pov-card-text">15 interviews across regions, proto-personas for both user types, and a 7-day design sprint with cross-functional teams. Redesigned search, navigation, opportunity discovery, and candidate allocation workflows.</div>
+      </div>
+      <div class="pov-card">
+        <div class="pov-card-header"><span class="pov-card-label">Solution</span><div class="pov-card-line"></div></div>
+        <div class="pov-card-text">
+        Redesigned search, filters, and allocation workflows for both Associates and Hiring Managers. Clearer navigation, personalised suggestions, and structured job proposals — reducing manual effort and improving talent visibility across Cognizant.
+        </div>
+    </div>
+  </div>
+</div>
+
+</section>
+
+<!-- PROBLEM --><!--
+<div class="divider-label" id="problem">01 — Problem & The Ask</div>
+<section class="sec">
+  <h2 class="sec-head">An outdated platform<br>failing <em>both</em> sides.</h2>
+  <p class="ask-intro">
+    C-Ahead, Cognizant's internal opportunity search platform, was outdated and difficult for both Associates and Hiring Managers to use. Associates struggled to find roles matching their skills, business line, and interests due to unclear navigation and limited filtering. Hiring Managers faced challenges in searching, allocating, reserving profiles, and proposing jobs efficiently. The overall experience lacked clarity, consistency, and smooth workflows — leading to delays, manual effort, and talent-opportunity mismatch.
+  </p>
+  <div class="ask-grid">
+    <div class="ask-card">
+      <div class="ask-num">01</div>
+      <div class="ask-badge">Associates</div>
+      <h3>Find Roles Easily</h3>
+      <p>Help Associates find roles that match their skills and interests easily, with clear navigation and smart filtering.</p>
+    </div>
+    <div class="ask-card">
+      <div class="ask-num">02</div>
+      <div class="ask-badge">Hiring Managers</div>
+      <h3>Search & Allocate</h3>
+      <p>Enable Hiring Managers to search, allocate, and propose candidates efficiently with streamlined workflows.</p>
+    </div>
+    <div class="ask-card">
+      <div class="ask-num">03</div>
+      <div class="ask-badge">Workflow</div>
+      <h3>Reduce Manual Steps</h3>
+      <p>Streamline workflows to reduce manual steps, cut down multi-screen tasks, and improve matching accuracy.</p>
+    </div>
+  </div> -->
+</section>
+
+<!-- SOLUTION 
+<section class="sec solution-sec">
+  <h2 class="sec-head">The <em>Solution</em></h2>
+  <p class="solution-body">
+    The redesigned C-Ahead application provides a clearer, more intuitive experience for both user types. Associates can now easily search for relevant opportunities using improved filters, personalized suggestions, and simplified navigation. For Hiring Managers, enhanced search tools, streamlined allocation workflows, and structured job-proposal features increase efficiency and reduce manual effort. The updated design brings consistency, improves visibility, reduces friction, and supports better alignment between talent and open opportunities across Cognizant.
+  </p>
+  <div class="solution-pills">
+    <span class="pill">Improved Filters</span>
+    <span class="pill">Personalized Suggestions</span>
+    <span class="pill">Simplified Navigation</span>
+    <span class="pill">Streamlined Allocation</span>
+    <span class="pill">Structured Job Proposals</span>
+    <span class="pill">Reduced Manual Effort</span>
+    <span class="pill">Better Talent Matching</span>
+  </div>
+</section> -->
+
+<!-- RESEARCH -->
+<div class="divider-label" id="research">01 — Discover (Research)</div>
+<section class="sec">
+  <h2 class="sec-head">Interview planning<br>& <em>execution.</em></h2>
+  <div class="research-layout">
+    <div>
+      <p style="font-size:15px; line-height:1.85; color:var(--muted-on-light); margin-bottom:40px;">
+        By planning and conducting interviews with Associates and Hiring Managers, I gathered insights into user needs, motivations, challenges, and existing workflow pain points. This helped build a strong understanding of the current experience and shaped the foundation for all later design decisions.
+      </p>
+      <ul class="insight-list">
+        <li><span>Users rely heavily on manual workarounds to compensate for missing platform features — spreadsheets used alongside the platform for tracking.</span></li>
+        <li><span>Role discovery is fragmented; Associates cannot easily surface opportunities relevant to their skills or business line.</span></li>
+        <li><span>Hiring Managers face information overload with too many profiles and insufficient filtering or sorting controls.</span></li>
+        <li><span>Navigation structure is misaligned with the actual mental model of both user types, causing repeated back-and-forth actions.</span></li>
+        <li><span>Lack of onboarding guidance leaves new Associates unsure about where to start or which section leads to the correct task.</span></li>
+      </ul>
+    </div>
+    <div class="research-sidebar">
+      <div class="r-card">
+        <div class="r-num">15+</div>
+        <div class="r-label">Interviews Taken</div>
+        <div class="r-sub">Roles: Hiring Managers & Associates</div>
+      </div>
+      <div class="r-card">
+        <div class="r-num">3</div>
+        <div class="r-label">Regions Covered</div>
+        <div class="r-sub">USA · GGM · India</div>
+      </div>
+      <div class="experience-chart">
+        <div class="exp-title">Work Experience Distribution</div>
+        <div class="exp-bar">
+          <div class="bar-row">
+            <span class="bar-label">1–5 yrs</span>
+            <div class="bar-track"><div class="bar-fill" style="width:13%"></div></div>
+            <span class="bar-pct">13%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">5–10 yrs</span>
+            <div class="bar-track"><div class="bar-fill" style="width:36%"></div></div>
+            <span class="bar-pct">36%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">10–15 yrs</span>
+            <div class="bar-track"><div class="bar-fill" style="width:22%"></div></div>
+            <span class="bar-pct">22%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">15+ yrs</span>
+            <div class="bar-track"><div class="bar-fill" style="width:29%"></div></div>
+            <span class="bar-pct">29%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PERSONAS -->
+<div class="divider-label" id="personas">02 — Define (Understanding Users)</div>
+<section class="sec" style="padding-bottom:0; border-bottom:none;">
+  <h2 class="sec-head">Proto Persona<br><em>Development.</em></h2>
+  <p style="font-size:15px; line-height:1.85; color:var(--muted-on-light); max-width:680px; margin-bottom:48px;">
+    Using early research insights, I developed proto-personas that captured user goals, behaviors, frustrations, and expectations. These helped align the team around who we were designing for and guided problem-framing and initial concept exploration.
+  </p>
+</section>
+<div class="persona-grid">
+  <div class="persona-card" data-initial="G">
+    <div class="persona-header">
+      <div class="persona-avatar">G</div>
+      <div class="persona-info">
+        <div class="persona-role-tag">Associate</div>
+        <div class="persona-name">Garrett</div>
+        <div class="persona-bio">Age 29 · Canada · 5+ Years Experience<br>Recently joined Cognizant — enthusiastic but unfamiliar with internal applications and policies.</div>
+      </div>
+    </div>
+    <div class="persona-cols">
+      <div class="persona-block">
+        <div class="persona-block-label">Goals</div>
+        <ul>
+          <li>Understand the internal job ecosystem quickly</li>
+          <li>Explore new roles and opportunities regularly</li>
+          <li>Navigate the application confidently without confusion</li>
+        </ul>
+      </div>
+      <div class="persona-block">
+        <div class="persona-block-label">Pain Points</div>
+        <ul>
+          <li>Unsure about where to start or which page leads to the correct task</li>
+          <li>Navigation feels unclear, causing repeated back-and-forth actions</li>
+          <li>Lacks confidence due to limited familiarity with internal processes</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="persona-card" data-initial="P">
+    <div class="persona-header">
+      <div class="persona-avatar">P</div>
+      <div class="persona-info">
+        <div class="persona-role-tag">Senior Manager</div>
+        <div class="persona-name">Philip</div>
+        <div class="persona-bio">Age 45 · Canada · 15+ Years Experience<br>Checks C-Ahead occasionally — mainly during bench periods when actively looking for new assignments.</div>
+      </div>
+    </div>
+    <div class="persona-cols">
+      <div class="persona-block">
+        <div class="persona-block-label">Goals</div>
+        <ul>
+          <li>Quickly understand which roles match their skillset</li>
+          <li>Complete tasks with minimal navigation and clear instructions</li>
+          <li>Avoid unnecessary complexity in the system</li>
+        </ul>
+      </div>
+      <div class="persona-block">
+        <div class="persona-block-label">Pain Points</div>
+        <ul>
+          <li>Platform feels confusing and overwhelming due to multiple sections</li>
+          <li>Not confident with technology, causing difficulty navigating features</li>
+          <li>Too much information creates overload; struggles to identify what matters</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SPRINT
+<div class="divider-label" id="sprint">04 — Ideate (Concept Generation)</div>
+<section class="sec sprint-sec">
+  <h2 class="sec-head">Design Sprint<br><em>Workshop.</em></h2>
+  <p class="sprint-intro">
+    In this 7-day design sprint, we mapped problems, explored multiple ideas, sketched solutions, and quickly prototyped concepts focused on improving the Associate experience. This allowed the team to rapidly explore possibilities, prioritize solutions, and test early assumptions — leading to a shared vision for the redesign.
+  </p>
+  <div class="sprint-row">
+    <div class="sprint-day"><div class="sd-label">Day 1</div><div class="sd-title">Understand</div><div class="sd-dot"></div></div>
+    <div class="sprint-day"><div class="sd-label">Day 2</div><div class="sd-title">Define Problems</div><div class="sd-dot"></div></div>
+    <div class="sprint-day"><div class="sd-label">Day 3</div><div class="sd-title">Sketch Ideas</div><div class="sd-dot"></div></div>
+    <div class="sprint-day"><div class="sd-label">Day 4</div><div class="sd-title">Decide Direction</div><div class="sd-dot"></div></div>
+    <div class="sprint-day"><div class="sd-label">Day 5–6</div><div class="sd-title">Prototype</div><div class="sd-dot"></div></div>
+    <div class="sprint-day"><div class="sd-label">Day 7</div><div class="sd-title">Test & Validate</div><div class="sd-dot"></div></div>
+  </div>
+</section>
+ -->
+<!-- TESTING -->
+<div class="divider-label" id="testing">03 — Validation & Refinement</div>
+<section class="sec" style="padding-bottom:0; border-bottom:none;">
+  <h2 class="sec-head">Usability Testing<br><em>in two rounds.</em></h2>
+  <p style="font-size:15px; line-height:1.85; color:var(--muted-on-light); max-width:680px; margin-bottom:48px;">
+    By observing users completing real tasks in the prototype, I identified usability issues, refined information flow, clarified interactions, and ensured the design was simple and efficient. This validation confirmed which solutions worked well and what required improvement.
+  </p>
+</section>
+<div class="test-grid">
+  <div class="test-panel">
+    <div class="test-tag">Round 01</div>
+    <div class="test-round-name">Foundation Level</div>
+    <div class="test-sessions-num">9</div>
+    <div class="test-sessions-label">Usability Sessions · 40 min each · Over 2 weeks</div>
+    <div class="test-details-row">
+      <div class="test-detail-item"><div class="td-label">Team</div><div class="td-val">1 Facilitator · 1 Observer · 1 Data Logger</div></div>
+      <div class="test-detail-item"><div class="td-label">Tasks</div><div class="td-val">6 tasks per session</div></div>
+    </div>
+    <div class="test-details-row">
+      <div class="test-detail-item"><div class="td-label">Age Range</div><div class="td-val">21–30 yrs (20%) · 30–45 yrs (80%)</div></div>
+    </div>
+    <div style="margin-bottom:8px;">
+      <div class="td-label" style="font-size:13px;font-weight:600;color:var(--muted-on-light);margin-bottom:8px;">Gender Split</div>
+      <div class="gender-bar"><div class="gender-m" style="width:70%"></div><div class="gender-f" style="width:30%"></div></div>
+      <div class="gender-legend">
+        <div class="gl-item"><div class="gl-dot" style="background:var(--navy)"></div>Male 70%</div>
+        <div class="gl-item"><div class="gl-dot" style="background:var(--accent)"></div>Female 30%</div>
+      </div>
+    </div>
+    <div class="recs-head">Final Actionable Recommendations</div>
+    <div class="rec-item">Add an intro video / onboarding tour for initial users to understand application sections.</div>
+    <div class="rec-item">Move 'Connect with Expert' option and increase the font size for better discoverability.</div>
+    <div class="rec-item">Display courses the user has already completed alongside current in-progress courses.</div>
+  </div>
+  <div class="test-panel">
+    <div class="test-tag">Round 02</div>
+    <div class="test-round-name">Execution Level</div>
+    <div class="test-sessions-num">12</div>
+    <div class="test-sessions-label">Usability Sessions · 30 min each · Over 3 weeks</div>
+    <div class="test-details-row">
+      <div class="test-detail-item"><div class="td-label">Team</div><div class="td-val">1 Facilitator · 2 Observers · 1 Data Logger</div></div>
+      <div class="test-detail-item"><div class="td-label">Tasks</div><div class="td-val">6 tasks per session</div></div>
+    </div>
+    <div class="test-details-row">
+      <div class="test-detail-item"><div class="td-label">Age Range</div><div class="td-val">20–29 yrs (25%) · 30–35 yrs (75%)</div></div>
+    </div>
+    <div style="margin-bottom:8px;">
+      <div class="td-label" style="font-size:13px;font-weight:600;color:var(--muted-on-light);margin-bottom:8px;">Gender Split</div>
+      <div class="gender-bar"><div class="gender-m" style="width:80%"></div><div class="gender-f" style="width:20%"></div></div>
+      <div class="gender-legend">
+        <div class="gl-item"><div class="gl-dot" style="background:var(--navy)"></div>Male 80%</div>
+        <div class="gl-item"><div class="gl-dot" style="background:var(--accent)"></div>Female 20%</div>
+      </div>
+    </div>
+    <div class="recs-head">Final Actionable Recommendations</div>
+    <div class="rec-item">Rename 'Connect with Expert' to 'Connect with Domain Expert' for clarity.</div>
+    <div class="rec-item">Rearrange 'Connect now' and 'Self-nominate' options for better flow hierarchy.</div>
+    <div class="rec-item">Highlight incomplete profile sections more prominently to encourage completion.</div>
+  </div>
+</div>
+
+<!-- OUTCOME -->
+<div class="divider-label" id="outcome">04 — Final Outcome</div>
+<div class="outcome-banner">
+  <h2 class="ob-head">Final <em>Screens</em><br>& Outcome</h2>
+  <p class="ob-desc">
+    The final designs showcase a clean visual system, well-structured layouts, and intuitive interaction patterns. These screens were shaped through research, ideation, and multiple rounds of testing — resulting in an experience that is simple, consistent, and aligned with user needs.
+  </p>
+</div>
+<div class="screens-grid">
+  <div class="screen-card">
+    <div class="screen-img-wrap">
+      <img src="CA1.jpg" alt="C-Ahead Dashboard Screen">
+      <div class="screen-img-overlay"></div>
+    </div>
+    <div class="screen-info">
+      <span class="screen-tag">Screen 01 · Dashboard</span>
+      <div class="screen-name">Home Dashboard</div>
+      <p class="screen-desc">Provides a quick overview of job recommendations, courses, and key updates — with Quick Access and My To Do's for immediate action.</p>
+    </div>
+  </div>
+  <div class="screen-card">
+    <div class="screen-img-wrap"><br>
+      <img src="CA2.png" alt="C-Ahead Profile Screen">
+      <div class="screen-img-overlay"></div>
+    </div>
+    <div class="screen-info">
+      <span class="screen-tag">Screen 02 · Profile</span>
+      <div class="screen-name">Profile Page</div>
+      <p class="screen-desc">Centralises personal details, skills, accomplishments, and career progress — with reward points and testimonials in one clean view.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Floating Back Button -->
+<a href="index.html" title="Back to Portfolio" style="
+  position: fixed;
+  bottom: 36px;
+  left: 36px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #00006a;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  box-shadow: 0 4px 20px rgba(0,0,72,0.35);
+  z-index: 999;
+  transition: transform 0.2s, box-shadow 0.2s;
+  font-size: 20px;
+"
+onmouseover="this.style.transform='scale(1.12)';this.style.boxShadow='0 8px 28px rgba(0,0,72,0.45)'"
+onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 4px 20px rgba(0,0,72,0.35)'"
+>
+  &#8592;
+</a>
+</body>
+</html>

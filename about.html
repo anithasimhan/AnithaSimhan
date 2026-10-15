@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>More About Me — Anitha Narasimhan</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --ink: #1C1C1E;
+  --ink2: #3A3A3C;
+  --muted: #8A8A8E;
+  --pale: #F5F4F0;
+  --white: #FFFFFF;
+  --green: #2D6A4F;
+  --green-light: #52B788;
+  --green-pale: #D8F3DC;
+  --border: #E4E2DD;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--pale);
+  color: var(--ink);
+  line-height: 1.7;
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(245,244,240,0.95);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 60px; height: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px; font-weight: 700;
+  color: var(--ink); text-decoration: none;
+}
+.nav-logo span { color: var(--green); }
+.back-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 13px; font-weight: 500; color: var(--muted);
+  text-decoration: none; padding: 8px 18px; border-radius: 50px;
+  border: 1px solid var(--border); background: var(--white);
+  transition: all 0.2s;
+}
+.back-btn:hover { color: var(--green); border-color: var(--green); background: var(--green-pale); }
+.back-btn svg { transition: transform 0.2s; }
+.back-btn:hover svg { transform: translateX(-3px); }
+
+/* PAGE HEADER */
+.page-header {
+  padding: 120px 60px 64px;
+  max-width: 1060px; margin: 0 auto;
+}
+.page-eyebrow {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--green);
+  display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
+}
+.page-eyebrow::before {
+  content: ''; display: inline-block;
+  width: 20px; height: 2px; background: var(--green); border-radius: 2px;
+}
+.page-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(36px, 5vw, 60px);
+  font-weight: 700; line-height: 1.05;
+  color: var(--ink); margin-bottom: 16px;
+}
+.page-title em { color: var(--green); font-style: italic; }
+.page-intro { font-size: 16px; color: var(--muted); max-width: 580px; line-height: 1.75; }
+
+/* HOBBY SECTIONS */
+.hobbies-wrap {
+  max-width: 1060px;
+  margin: 0 auto;
+  padding: 0 60px 80px;
+}
+
+.hobby-section {
+  padding: 72px 0;
+  border-top: 1px solid var(--border);
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.hobby-section.visible { opacity: 1; transform: translateY(0); }
+.hobby-section:last-child { border-bottom: 1px solid var(--border); }
+
+.hobby-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: start;
+  margin-bottom: 48px;
+}
+
+/* bold big label — no subtitle */
+.hobby-number {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.hobby-number .num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 52px;
+  font-weight: 700;
+  color: var(--green-pale);
+  line-height: 1;
+  flex-shrink: 0;
+}
+.hobby-number .label {
+  font-family: 'Outfit', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.hobby-desc {
+  font-size: 15px; color: var(--ink2);
+  line-height: 1.85; margin-bottom: 0;
+}
+
+.design-link {
+  border-left: 2px solid var(--green);
+  padding: 16px 18px;
+  background: #f0f8f4;
+  border-radius: 0 8px 8px 0;
+  align-self: center;
+}
+.design-link-label {
+  font-size: 10px; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--green); font-weight: 600; margin-bottom: 8px;
+}
+.design-link-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px; font-style: italic; color: var(--ink2); line-height: 1.65;
+}
+
+/* ── CREATIVE PHOTO GRID ──
+   Uses CSS grid (not columns) so heights are reliable.
+   Layout: 3 cols × 2 rows
+   Photo 1: col 1, rows 1-2 (tall)
+   Photo 2: col 2, row 1
+   Photo 3: col 3, row 1
+   Photo 4: col 2, row 2
+   Photo 5: col 3, row 2 (taller — spans visual weight)
+*/
+.photo-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr 1fr;
+  grid-template-rows: 200px 260px;
+  gap: 12px;
+}
+
+.photo-slot {
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+  background: var(--border);
+  cursor: pointer;
+}
+
+/* slot positions */
+.photo-slot.p1 { grid-column: 1; grid-row: 1 / 3; } /* tall left */
+.photo-slot.p2 { grid-column: 2; grid-row: 1; }
+.photo-slot.p3 { grid-column: 3; grid-row: 1; }
+.photo-slot.p4 { grid-column: 2; grid-row: 2; }
+.photo-slot.p5 { grid-column: 3; grid-row: 2; }     /* big bottom right */
+
+.photo-slot img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+  transition: transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.photo-slot:hover img { transform: scale(1.08); }
+
+/* colour tint on hover — each hobby gets its own shade */
+.photo-slot::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: rgba(45,106,79,0);
+  transition: background 0.35s ease;
+  border-radius: 14px;
+}
+.photo-slot:hover::after { background: rgba(45,106,79,0.15); }
+
+/* placeholder text */
+.photo-slot span {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; color: #bbb; z-index: 1;
+}
+
+/* FOOTER */
+.page-footer {
+  background: var(--ink);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 24px 60px; text-align: center;
+}
+.page-footer p { font-size: 12px; color: rgba(255,255,255,0.3); }
+
+/* RESPONSIVE */
+@media (max-width: 860px) {
+  nav { padding: 0 24px; }
+  .page-header { padding: 100px 24px 48px; }
+  .hobbies-wrap { padding: 0 24px 60px; }
+  .hobby-header { grid-template-columns: 1fr; gap: 32px; }
+  .photo-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 180px 180px 200px;
+  }
+  .photo-slot.p1 { grid-column: 1 / 3; grid-row: 1; }
+  .photo-slot.p2 { grid-column: 1; grid-row: 2; }
+  .photo-slot.p3 { grid-column: 2; grid-row: 2; }
+  .photo-slot.p4 { grid-column: 1; grid-row: 3; }
+  .photo-slot.p5 { grid-column: 2; grid-row: 3; }
+  .page-footer { padding: 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">Anitha <span>N.</span></a>
+  <a href="index.html" class="back-btn">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19 12H5M5 12l7-7M5 12l7 7"/>
+    </svg>
+    Back to Portfolio
+  </a>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="page-eyebrow">More about me</div>
+  <h1 class="page-title">Beyond the <em>Screens</em></h1>
+  <p class="page-intro">My creativity does not switch off when I close Figma. Here is what keeps me curious — and how each hobby quietly shapes the way I design.</p>
+</div>
+
+<!-- HOBBIES -->
+<div class="hobbies-wrap">
+
+  <!-- 01 DIY -->
+  <div class="hobby-section">
+    <div class="hobby-header">
+      <div class="hobby-text">
+        <div class="hobby-number">
+          <span class="num">01</span>
+          <span class="label">DIY Activities</span>
+        </div>
+        <p class="hobby-desc">
+      I enjoy making things by hand, from dreamcatchers to wall hangings. 
+      Every project starts rough and gets better through small improvements.
+      </div>
+      <div class="design-link">
+        <div class="design-link-label">In my work</div>
+        <div class="design-link-text">
+        I approach wireframes the same way. Start simple, learn quickly, and refine based on feedback.
+        </div>
+      </div>
+    </div>
+    <div class="photo-grid">
+      <div class="photo-slot p1"><img src="D1.jpg" alt="DIY 1" onerror="this.style.display='none'"></div>
+      <div class="photo-slot p2"><img src="D2.jpg" alt="DIY 2" onerror="this.style.display='none'"></div>
+      <div class="photo-slot p3"><img src="D3.jpg" alt="DIY 3" onerror="this.style.display='none'"></div>
+      <div class="photo-slot p4"><img src="D4.jpg" alt="DIY 4" onerror="this.style.display='none'"></div>
+      <div class="photo-slot p5"><img src="D5.jpg" alt="DIY 5" onerror="this.style.display='none'"></div>
+    </div>
+  </div>
+
+  <!-- 02 Gardening -->
+  <div class="hobby-section">
+    <div class="hobby-header">
+      <div class="hobby-text">
+        <div class="hobby-number">
+          <span class="num">02</span>
+          <span class="label">Gardening</span>
+        </div>
+        <p class="hobby-desc">I grow plants at home — more than 15 now. 
+         Each plant teaches me that growth takes patience, observation, and small adjustments.</p>
+      </div>
+      <div class="design-link">
+        <div class="design-link-label">In my work</div>
+        <div class="design-link-text">That is exactly how I iterate on designs. 
+          One change at a time. Test it. See if it helped. If not, try something else. 
+          Small steps lead to the right answer.</div>
+      </div>
+    </div>
+    <div class="photo-grid">
+      <div class="photo-slot p1"><img src="G1.jpg" alt="Garden 1" onerror="this.style.display='none'"></div>
+      <div class="photo-slot p2"><img src="G2.jpg" alt="Garden 2" onerror="this.style.display='none'"></div>
+      <div class="photo-slot p3"><img src="G3.jpg" alt="Garden 3" onerror="this.style.display='none'"><=</div>
+      <div class="photo-slot p4"><img src="G4.jpg" alt="Garden 4" onerror="this.style.display='none'"></div>
+      <div class="photo-slot p5"><img src="G5.jpg" alt="Garden 5" onerror="this.style.display='none'"></div>
+    </div>
+  </div>
+
+  <!-- 03 Cooking -->
+  <div class="hobby-section">
+    <div class="hobby-header">
+      <div class="hobby-text">
+        <div class="hobby-number">
+          <span class="num">03</span>
+          <span class="label">Cooking</span>
+        </div>
+        <p class="hobby-desc"> I enjoy cooking because every 
+          dish is a balance of planning, experimentation, and adjustment. 
+          Small tweaks can completely change the outcome.</p>
+      </div>
+      <div class="design-link">
+        <div class="design-link-label">In my work</div>
+        <div class="design-link-text">I've learned that the best solutions come from observation, not assumptions. 
+          I listen to users, learn from their behavior, and refine experiences based on real needs.</div>
+      </div>
+    </div>
+    <div class="photo-grid">
+      <div class="photo-slot p1"><img src="CO2.jpg" alt="Cooking 1" onerror="this.style.display='none'"></div>
+      <div class="photo-slot p2"><img src="CO3.jpg" alt="Cooking 2" onerror="this.style.display='none'"></div>
+      <div class="photo-slot p3"><img src="CO4.png" alt="Cooking 3" onerror="this.style.display='none'"></div>
+      <div class="photo-slot p4"><img src="CO5.jpg" alt="Cooking 4" onerror="this.style.display='none'"></div>
+      <div class="photo-slot p5"><img src="CO1.png" alt="Cooking 5" onerror="this.style.display='none'"></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="page-footer">
+  <p>Designed & crafted by Anitha Narasimhan · Sr. Experience Designer</p>
+</div>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.hobby-section').forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>

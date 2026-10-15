@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Moment Design Platform — Case Study</title>
+  <!-- Google Fonts: Plus Jakarta Sans for UI & Playfair Display for Italics/Serif accents -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Playfair+Display:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-main: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-card: #ffffff;
+      --bg-card-hover: #f1f5f9;
+      --bg-alt: #f1f5f9;
+      --bg-accent-section: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+      
+      --border-subtle: #e2e8f0;
+      --border-strong: #cbd5e1;
+      --border-accent: rgba(79, 70, 229, 0.3);
+      
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      
+      --accent-indigo: #4f46e5;
+      --accent-purple: #7c3aed;
+      --accent-blue: #2563eb;
+      --accent-cyan: #0891b2;
+      --accent-emerald: #059669;
+      
+      --gradient-brand: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #0284c7 100%);
+      --gradient-stat: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%);
+      
+      --radius-sm: 8px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --radius-xl: 32px;
+      
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+      --shadow-hover: 0 12px 30px -4px rgba(79, 70, 229, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-primary);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    em {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-weight: 500;
+      background: var(--gradient-brand);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Ambient Glow Effects for Light Mode */
+    .bg-glow-top {
+      position: absolute;
+      top: -150px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 900px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, rgba(124, 58, 237, 0.04) 40%, rgba(255, 255, 255, 0) 70%);
+      filter: blur(80px);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Navigation Header */
+    nav {
+      padding: 24px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 40px;
+    }
+
+    .nav-logo {
+      font-weight: 800;
+      font-size: 1.25rem;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-primary);
+    }
+
+    .nav-logo-dot {
+      width: 10px;
+      height: 10px;
+      background: var(--accent-indigo);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--accent-indigo);
+    }
+
+    .nav-badge {
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      padding: 6px 16px;
+      border-radius: 100px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Tags & Badges */
+    .section-tag, .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent-indigo);
+      background: rgba(79, 70, 229, 0.08);
+      border: 1px solid rgba(79, 70, 229, 0.2);
+      padding: 6px 16px;
+      border-radius: 100px;
+      margin-bottom: 24px;
+    }
+
+    .section-tag.white {
+      color: #93c5fd;
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .cs-hero {
+      padding: 40px 0 80px 0;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 48px;
+    }
+
+    @media (min-width: 992px) {
+      .cs-hero {
+        grid-template-columns: 1.2fr 1fr;
+        align-items: center;
+      }
+    }
+
+    .hero-content h1 {
+      font-size: clamp(2.8rem, 5vw, 4.5rem);
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      margin-bottom: 24px;
+      color: var(--text-primary);
+    }
+
+    .hero-sub {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      max-width: 580px;
+      margin-bottom: 32px;
+      line-height: 1.6;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      padding-top: 20px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .hero-meta span:nth-child(2n) {
+      color: var(--accent-indigo);
+      font-weight: 700;
+    }
+
+    /* Stats Grid Cards */
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 28px 24px;
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: var(--gradient-brand);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-accent);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .stat-card:hover::before {
+      opacity: 1;
+    }
+
+    .stat-card.wide {
+      grid-column: span 2;
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 800;
+      background: var(--gradient-stat);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    /* General Section Styling */
+    .section {
+      padding: 80px 0;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .section h2 {
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+      color: var(--text-primary);
+    }
+
+    .lead {
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      max-width: 800px;
+    }
+
+    .section p {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      max-width: 780px;
+      line-height: 1.7;
+    }
+
+    /* Alt Section Styling */
+    .section.alt {
+      background: var(--bg-surface);
+      border-radius: var(--radius-xl);
+      padding: 60px 48px;
+      margin: 40px 0;
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-md);
+    }
+
+    .section.dark {
+      background: var(--bg-accent-section);
+      border-radius: var(--radius-xl);
+      padding: 80px 48px;
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-hover);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .white {
+      color: #FFFFFF !important;
+    }
+.white-lead {
+  color: #ffffff !important;
+}
+    .white-lead {
+      font-size: 1.25rem;
+      color: #FFFFFF;
+      margin-bottom: 40px;
+    }
+
+    .feature-grid, .domain-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+      margin-top: 40px;
+    }
+
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 32px 28px;
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      border-color: var(--accent-indigo);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .feature-card h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--text-primary);
+    }
+
+    .feature-card p {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .domain-card {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(8px);
+      border-radius: var(--radius-md);
+      padding: 32px 28px;
+      transition: all 0.3s ease;
+    }
+
+    .domain-card:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-4px);
+    }
+
+    .domain-card h4 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: #FFFFFF;
+    }
+
+    .domain-card p {
+      font-size: 0.95rem;
+      color: #cbd5e1;
+      line-height: 1.6;
+    }
+
+    .contribution-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+      margin-top: 40px;
+    }
+
+    @media (min-width: 768px) {
+      .contribution-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .contribution-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 36px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .contribution-box h4 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--accent-indigo);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .contribution-box ul {
+      list-style: none;
+    }
+
+    .contribution-box li {
+      position: relative;
+      padding-left: 28px;
+      margin-bottom: 14px;
+      color: var(--text-secondary);
+      font-size: 1rem;
+    }
+
+    .contribution-box li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--accent-emerald);
+      font-weight: 800;
+    }
+
+    /* Impact Metrics Section */
+    .impact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 40px;
+    }
+
+    .impact-item {
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 36px 30px;
+      text-align: center;
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s ease;
+    }
+
+    .impact-item:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--border-accent);
+    }
+
+    .impact-number {
+      font-size: 3.5rem;
+      font-weight: 800;
+      background: var(--gradient-brand);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 12px;
+      line-height: 1;
+    }
+
+    .impact-item p {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      margin: 0 auto;
+    }
+
+    /* Quote Block Styling */
+    .quote-section {
+      text-align: center;
+      padding: 100px 0;
+    }
+
+    blockquote {
+      font-size: clamp(1.4rem, 2.8vw, 2.1rem);
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      color: var(--text-primary);
+      max-width: 900px;
+      margin: 0 auto;
+      line-height: 1.5;
+      position: relative;
+    }
+
+    blockquote::before {
+      content: '“';
+      font-size: 6rem;
+      position: absolute;
+      top: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--accent-indigo);
+      opacity: 0.15;
+    }
+
+    footer {
+      border-top: 1px solid var(--border-subtle);
+      padding: 40px 0;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+  /* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(245,244,240,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 60px;
+  height: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px; font-weight: 700;
+  color: var(--ink); text-decoration: none;
+  letter-spacing: 0.01em;
+}
+.nav-logo span { color: var(--green); }
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a {
+  font-size: 13px; font-weight: 500; letter-spacing: 0.06em;
+  text-transform: uppercase; text-decoration: none;
+  color: var(--muted); transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--green); }
+
+  </style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">Anitha <span>N.</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Projects</a></li>
+ <li><a href="about.html">More About Me</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+  <!-- Ambient Light Background Glow -->
+  <div class="bg-glow-top"></div>
+
+  <div class="container">
+ 
+
+    <!-- HERO SECTION -->
+    <section class="cs-hero">
+      <div class="hero-content">
+<br><br>
+        <div class="hero-tag">
+          Design Platform • Design System
+        </div>
+        <h1>
+          Moment
+          <br>
+          <em>Design Platform</em>
+        </h1>
+        <p class="hero-sub">
+          Building a shared foundation for enterprise experiences through
+          reusable components, design tokens, templates, and
+          future-ready page patterns.
+        </p>
+        <div class="hero-meta">
+          <span>2025–2026</span>
+          <span>•</span>
+          <span>Cognizant</span>
+        
+        </div>
+      </div>
+      
+      <div class="hero-stats">
+        <div class="stat-card">
+          <div class="stat-number">80%</div>
+          <div class="stat-label">
+            Reduction in library maintenance effort
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">90%</div>
+          <div class="stat-label">
+            Faster AI engagement delivery
+          </div>
+        </div>
+        <div class="stat-card wide">
+          <div class="stat-number">25 → 125+</div>
+          <div class="stat-label">
+            Reusable components and page patterns roadmap
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- OVERVIEW SECTION -->
+    <section class="section">
+      <div class="section-tag">
+        Overview
+      </div>
+      <h2>
+        One platform.
+        <br>
+        <em>Many experiences.</em>
+      </h2>
+      <p class="lead">
+        Moment was created to become the central design platform
+        for DX Strategy & Design.
+      </p>
+      <p>
+        Rather than building from scratch for every initiative,
+        teams can leverage shared design foundations, reusable
+        components, templates, and domain-based page patterns
+        to accelerate product creation while maintaining consistency.
+      </p>
+    </section>
+
+    <!-- VISION SECTION -->
+    <section class="section alt">
+      <div class="section-tag">
+        Vision
+      </div>
+      <h2>
+        Beyond a
+        <em>component library.</em>
+      </h2>
+      <p class="lead">
+        The goal wasn't to create another UI kit.
+      </p>
+      <p>
+        The vision was to build a design platform that enables
+        teams to move faster from idea to experience by providing
+        reusable frameworks that scale across products,
+        domains, and future AI-powered workflows.
+      </p>
+    </section>
+
+    <!-- PLATFORM SECTION -->
+    <section class="section">
+      <div class="section-tag">
+        The Platform
+      </div>
+      <h2>
+        What we're
+        <em>building.</em>
+      </h2>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h3>Design Tokens</h3>
+          <p>
+            Color, typography, spacing, elevation, and
+            semantic variables serving as the single source of truth.
+          </p>
+        </div>
+        <div class="feature-card">
+          <h3>Components</h3>
+          <p>
+            Production-ready enterprise components
+            with states, variants, and documentation.
+          </p>
+        </div>
+        <div class="feature-card">
+          <h3>Templates</h3>
+          <p>
+            Reusable layouts and workflows that accelerate
+            POCs and product initiatives.
+          </p>
+        </div>
+        <div class="feature-card">
+          <h3>AI Patterns</h3>
+          <p>
+            Agentic interaction models and AI-ready
+            design patterns for future experiences.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEXT EVOLUTION -->
+<section class="section dark">
+  <div class="section-tag white">
+    Next Evolution
+  </div>
+  <h2 class="white">
+    From components
+    <br>
+    to complete
+    <em>experiences.</em>
+  </h2>
+  <p class="white-lead">
+    Moving from individual UI elements to domain-specific page frameworks.
+  </p>
+  <div class="domain-grid">
+    <div class="domain-card">
+      <h4>Banking & Financial Services (BFS)</h4>
+      <p>
+        Digital banking dashboards, loan processing workflows, fraud alerts, and wealth management screens.
+      </p>
+    </div>
+    <div class="domain-card">
+      <h4>Healthcare & Life Sciences</h4>
+      <p>
+        Patient care portals, electronic health records (EHR), clinical trial management, and telemetry views.
+      </p>
+    </div>
+    <div class="domain-card">
+      <h4>Insurance</h4>
+      <p>
+        Policy administration, automated claims processing, quote engines, and risk assessment workflows.
+      </p>
+    </div>
+    <div class="domain-card">
+      <h4>MLEU</h4>
+      <p>
+        Supply chain monitoring, smart asset tracking, field operation consoles, and inventory management systems.
+      </p>
+    </div>
+    <div class="domain-card">
+      <h4>AI Experiences</h4>
+      <p>
+        Copilot interfaces, intelligent automation agents, smart search, and predictive recommendation panels.
+      </p>
+    </div>
+  </div>
+</section>
+
+    <!-- IMPACT SECTION -->
+    <section class="section impact">
+      <div class="section-tag">
+        Impact
+      </div>
+      <h2>
+        Creating a foundation
+        <em>that scales.</em>
+      </h2>
+      <div class="impact-grid">
+        <div class="impact-item">
+          <div class="impact-number">80%</div>
+          <p>
+            Reduced maintenance effort across the
+            design library ecosystem.
+          </p>
+        </div>
+        <div class="impact-item">
+          <div class="impact-number">90%</div>
+          <p>
+            Faster delivery for AI-enabled engagements.
+          </p>
+        </div>
+        <div class="impact-item">
+          <div class="impact-number">125+</div>
+          <p>
+            Future roadmap spanning components,
+            templates, and page-level experiences.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final Images SECTION -->
+
+<section class="section dark">
+  
+   <div class="section-tag white">Design Foundations</div>
+  
+  <h2 class="white">
+    Foundational Design Assets
+    <span style="display: block; font-weight: normal; color: #a0aec0; margin-top: 0.25rem;">Visual tokens, typography, and component specs.</span>
+  </h2>
+  
+  <p class="white-lead" style="color: #ffffff; max-width: 800px; line-height: 1.6; margin-top: 1.5rem; margin-bottom: 2.5rem;">
+    A visual reference of the foundational assets, design tokens, and structural standards powering the Moment Design Platform across all enterprise touchpoints.
+  </p>
+      <div class="impact-grid">
+        <div class="image-container">
+  <img src="Wireframe - 1.png" alt="Description of the image" style="width: 100%; height: auto;">
+</div>
+ <div class="image-container">
+  <img src="Comp1.png" alt="Description of the image" style="width: 100%; height: auto;">
+</div>
+      </div>
+  </div>
+</section>
+  </div>
+<!-- Floating Back Button -->
+<a href="index.html" title="Back to Portfolio" style="
+  position: fixed;
+  bottom: 36px;
+  left: 36px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #2E2415;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  box-shadow: 0 4px 20px rgba(46,36,21,0.35);
+  z-index: 999;
+  transition: transform 0.2s, box-shadow 0.2s;
+  font-size: 20px;
+"
+onmouseover="this.style.transform='scale(1.12)';this.style.boxShadow='0 8px 28px rgba(46,36,21,0.45)'"
+onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 4px 20px rgba(46,36,21,0.35)'"
+>
+  &#8592;
+</a>
+
+</body>
+</html>

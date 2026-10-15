@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profile & Settings — UX Case Study</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0F2340;--navy2:#1C3A60;--teal:#1A7A6E;--teal-l:#D6EFEC;--teal-m:#5BB5A8;
+  --usblue:#154284;--usblue2:#1A5296;--white:#fff;--fog:#F4F7FB;
+  --ink:#0D1B2A;--body:#3A4F63;--muted:#7A94AC;--border:#D4E0EC;--r:8px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--fog);color:var(--ink);font-family:'Sora',sans-serif;font-size:14px;line-height:1.7;-webkit-font-smoothing:antialiased}
+nav{background:var(--navy);height:52px;display:flex;align-items:center;padding:0 36px;position:sticky;top:0;z-index:99;border-bottom:1px solid var(--navy2)}
+.nav-logo{font-size:13px;font-weight:600;color:var(--white);letter-spacing:.02em}
+.nav-pill{margin-left:14px;background:var(--teal-l);color:#0E524A;font-size:11px;font-weight:500;padding:2px 10px;border-radius:20px}
+.hero{background:var(--navy);padding:52px 0 48px;border-bottom:3px solid var(--teal)}
+.hero-inner{max-width:860px;margin:0 auto;padding:0 36px}
+.hero-eyebrow{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.tag{font-size:11px;font-weight:500;padding:3px 10px;border-radius:4px}
+.tag-teal{background:var(--teal-l);color:#0E524A}
+.tag-white{background:rgba(255,255,255,.1);color:rgba(255,255,255,.75)}
+.hero h1{font-size:42px;font-weight:300;color:var(--white);line-height:1.1;margin-bottom:16px;letter-spacing:-.5px}
+.hero h1 em{font-style:italic;font-weight:300;color:var(--teal-m)}
+.hero-desc{font-size:15px;color:rgba(255,255,255,.65);line-height:1.7;max-width:560px;margin-bottom:32px}
+.hero-stats{display:flex;gap:36px;flex-wrap:wrap;padding-top:24px;border-top:1px solid rgba(255,255,255,.12)}
+.stat-val{font-size:24px;font-weight:600;color:var(--white);line-height:1}
+.stat-lbl{font-size:11px;color:rgba(255,255,255,.5);margin-top:3px}
+.wrap{max-width:860px;margin:0 auto;padding:0 36px 80px}
+.sec{margin-top:52px}
+.sec-eyebrow{font-size:11px;font-weight:500;color:var(--teal);letter-spacing:.06em;margin-bottom:10px}
+.sec h2{font-size:26px;font-weight:400;color:var(--ink);margin-bottom:14px;line-height:1.2}
+.sec p{font-size:14px;color:var(--body);line-height:1.75;margin-bottom:10px;max-width:640px}
+.sec p:last-child{margin-bottom:0}
+.rule{height:1px;background:var(--border);margin-top:52px}
+.role-box{display:flex;gap:0;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-top:20px;background:var(--white)}
+.role-col{flex:1;padding:16px 20px;border-right:1px solid var(--border)}
+.role-col:last-child{border-right:none}
+.rc-label{font-size:10px;font-weight:500;color:var(--muted);margin-bottom:5px;letter-spacing:.04em}
+.rc-val{font-size:13px;color:var(--ink);line-height:1.55}
+
+/* ── SCREENS ── */
+.screens-section{margin-top:24px}
+.screens-title{font-size:12px;font-weight:500;color:var(--muted);margin-bottom:14px;letter-spacing:.04em}
+.screen-pair{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:20px}
+.screen-box{background:var(--white);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.screen-label{background:var(--fog);border-bottom:1px solid var(--border);padding:8px 14px;font-size:11px;font-weight:500;color:var(--muted);display:flex;align-items:center;gap:6px}
+.screen-label::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--teal);display:inline-block}
+.screen-body{padding:0}
+
+/* US BANK DESKTOP UI */
+.usb-nav{background:#154284;padding:8px 14px;display:flex;align-items:center;justify-content:space-between}
+.usb-logo{font-size:11px;font-weight:700;color:white;background:#FF0000;padding:2px 6px;border-radius:2px}
+.usb-nav-links{display:flex;gap:14px}
+.usb-nav-link{font-size:10px;color:rgba(255,255,255,.8)}
+.usb-subnav{background:#1A5296;padding:5px 14px;display:flex;gap:12px}
+.usb-subnav-link{font-size:10px;color:rgba(255,255,255,.7)}
+.usb-hero{background:linear-gradient(135deg,#0F2340,#1A5296);padding:28px 16px;position:relative}
+.usb-hero-title{font-size:18px;font-weight:600;color:white}
+.usb-hero-user{font-size:11px;color:rgba(255,255,255,.7);margin-top:2px;display:flex;align-items:center;gap:6px}
+.usb-hero-avatar{width:18px;height:18px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:600;color:white}
+.usb-afy{position:absolute;right:16px;top:14px;text-align:right}
+.usb-afy-label{font-size:9px;font-weight:600;color:rgba(255,255,255,.6);letter-spacing:.06em;margin-bottom:4px}
+.usb-afy-item{font-size:11px;color:white;display:flex;align-items:center;justify-content:flex-end;gap:4px;margin-bottom:3px}
+.usb-afy-item span{font-size:10px;color:rgba(255,255,255,.6)}
+.usb-new-badge{background:var(--teal);color:white;font-size:8px;padding:1px 5px;border-radius:3px}
+.usb-overview{padding:12px 16px}
+.usb-ov-label{font-size:10px;font-weight:600;color:var(--muted);letter-spacing:.05em;margin-bottom:10px}
+.usb-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.usb-card{background:var(--fog);border:1px solid var(--border);border-radius:5px;padding:8px 10px}
+
+.usb-card-icon{font-size:16px;margin-bottom:4px}
+.usb-card-title{font-size:11px;font-weight:500;color:var(--ink)}
+.usb-card-desc{font-size:10px;color:var(--muted);margin-top:2px;line-height:1.4}
+.usb-card-badge{font-size:9px;color:#C9963A;font-weight:500;margin-top:3px;display:flex;align-items:center;gap:3px}
+.usb-footer{background:#0F2340;padding:10px 16px;display:flex;justify-content:space-between;align-items:center}
+.usb-footer-links{display:flex;gap:10px}
+.usb-footer-link{font-size:9px;color:rgba(255,255,255,.5)}
+
+/* MOBILE UI */
+.mob-screen{background:white;border-radius:12px;overflow:hidden;border:1px solid var(--border)}
+.mob-statusbar{background:#154284;padding:4px 10px;display:flex;justify-content:space-between}
+.mob-statusbar span{font-size:9px;color:rgba(255,255,255,.7)}
+.mob-hero{background:linear-gradient(135deg,#0F2340,#1A5296);padding:12px 12px 14px}
+.mob-back{font-size:10px;color:rgba(255,255,255,.6);margin-bottom:6px}
+.mob-title{font-size:14px;font-weight:600;color:white}
+.mob-user{font-size:10px;color:rgba(255,255,255,.6);display:flex;align-items:center;gap:4px;margin-top:2px}
+.mob-afy{margin-top:8px}
+.mob-afy-label{font-size:8px;font-weight:600;color:rgba(255,255,255,.5);letter-spacing:.06em;margin-bottom:4px}
+.mob-afy-row{background:rgba(255,255,255,.1);border-radius:4px;padding:5px 8px;margin-bottom:3px;font-size:10px;color:white;display:flex;justify-content:space-between;align-items:center}
+.mob-afy-row span{color:rgba(255,255,255,.5);font-size:10px}
+.mob-body{padding:10px}
+.mob-ov-label{font-size:9px;font-weight:600;color:var(--muted);letter-spacing:.05em;margin-bottom:6px}
+.mob-list-item{background:var(--fog);border:1px solid var(--border);border-radius:4px;padding:7px 10px;margin-bottom:4px;font-size:11px;color:var(--ink);display:flex;justify-content:space-between;align-items:flex-start}
+.mob-list-desc{font-size:9px;color:var(--muted);margin-top:1px}
+.mob-needs{font-size:9px;color:#C9963A;display:flex;align-items:center;gap:2px}
+
+/* ── FLOWS WITH SVG ARROWS ── */
+.flow-section{margin-top:24px}
+.flow-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.flow-diagram{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:20px}
+.flow-diagram-title{font-size:12px;font-weight:600;color:var(--teal);text-transform:uppercase;letter-spacing:.06em;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.flow-svg-wrap{width:100%;overflow:visible}
+
+/* ── PRIORITY TABLE ── */
+.ptable{width:100%;border-collapse:collapse;margin-top:16px;font-size:13px}
+.ptable th{text-align:left;font-size:11px;font-weight:500;color:var(--muted);padding:8px 12px;border-bottom:2px solid var(--border);background:var(--fog)}
+.ptable td{padding:8px 12px;border-bottom:1px solid var(--border);color:var(--body);vertical-align:top;line-height:1.5}
+.ptable tr:last-child td{border-bottom:none}
+.p-high{background:#FEF2F2;color:#991B1B;font-size:10.5px;font-weight:500;padding:2px 8px;border-radius:4px;display:inline-block}
+.p-med{background:#FFFBEB;color:#92400E;font-size:10.5px;font-weight:500;padding:2px 8px;border-radius:4px;display:inline-block}
+.p-low{background:var(--fog);color:var(--muted);font-size:10.5px;font-weight:500;padding:2px 8px;border-radius:4px;display:inline-block}
+.p-na{background:#F0F4F8;color:#64748B;font-size:10.5px;padding:2px 8px;border-radius:4px;display:inline-block}
+
+/* ── LIFECYCLE TABLE ── */
+.ltable{width:100%;border-collapse:collapse;margin-top:16px;font-size:13px}
+.ltable th{text-align:left;font-size:11px;font-weight:500;color:var(--muted);padding:8px 12px;border-bottom:2px solid var(--border);background:var(--fog)}
+.ltable td{padding:8px 12px;border-bottom:1px solid var(--border);color:var(--body);vertical-align:top;line-height:1.5}
+.ltable tr:last-child td{border-bottom:none}
+.ltable td:first-child{font-weight:500;color:var(--ink);white-space:nowrap}
+
+/* ── SYSTEM BEHAVIOR ── */
+.sbgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:16px}
+.sbcard{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px}
+.sbcard h5{font-size:12px;font-weight:600;color:var(--teal);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.sb-row{margin-bottom:8px}
+.sb-row-label{font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px}
+.sb-row-val{font-size:12px;color:var(--body);line-height:1.5}
+
+/* ── FINDINGS ── */
+.finding{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:16px 20px;margin-bottom:10px;display:flex;gap:16px;align-items:flex-start}
+.finding-num{font-size:28px;font-weight:300;color:var(--teal);line-height:1;flex-shrink:0;width:32px}
+.finding h4{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:4px}
+.finding p{font-size:13px;color:var(--body);margin:0;line-height:1.6}
+
+/* ── RECOMMENDATIONS ── */
+.rec{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:16px 20px;margin-bottom:10px}
+.rec-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.rec-badge{font-size:10px;font-weight:500;padding:2px 9px;border-radius:10px;background:var(--teal-l);color:#0E524A;flex-shrink:0}
+.rec h4{font-size:13px;font-weight:600;color:var(--ink);margin:0}
+.rec p{font-size:13px;color:var(--body);margin:0;line-height:1.65}
+.rec-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.rec-tag{font-size:11px;background:var(--fog);border:1px solid var(--border);border-radius:4px;padding:2px 10px;color:var(--body)}
+
+/* ── OUTCOME ── */
+.outcome-band{background:var(--teal-l);border:1px solid var(--teal-m);border-radius:var(--r);padding:28px;margin-top:20px}
+.outcome-band h3{font-size:18px;font-weight:500;color:#0A3D36;margin-bottom:16px}
+.og{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.oi{background:rgba(255,255,255,.65);border-radius:5px;padding:10px 14px;display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--ink);line-height:1.5}
+.oi-mark{color:var(--teal);flex-shrink:0;font-weight:600}
+
+/* ── CARDS GRID ── */
+.cg{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.ccard{background:var(--white);border:1px solid var(--border);border-left:3px solid var(--teal);border-radius:0 var(--r) var(--r) 0;padding:14px 16px}
+.ccard h4{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:4px}
+.ccard p{font-size:13px;color:var(--body);margin:0;line-height:1.6}
+
+@media(max-width:640px){
+  .hero h1{font-size:28px}
+  .wrap,.hero-inner{padding-left:18px;padding-right:18px}
+  .role-box{flex-direction:column}
+  .role-col{border-right:none;border-bottom:1px solid var(--border)}
+  .role-col:last-child{border-bottom:none}
+  .screen-pair{grid-template-columns:1fr}
+  .flow-grid,.sbgrid,.og,.cg{grid-template-columns:1fr}
+}
+  nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(245,244,240,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 60px;
+  height: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px; font-weight: 700;
+  color: var(--ink); text-decoration: none;
+  letter-spacing: 0.01em;
+}
+.nav-logo span { color: var(--green); }
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a {
+  font-size: 13px; font-weight: 500; letter-spacing: 0.06em;
+  text-transform: uppercase; text-decoration: none;
+  color: var(--muted); transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--green); }
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">Anitha <span>N.</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Projects</a></li>
+ <li><a href="about.html">More About Me</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+  
+<div class="hero"><br><br>
+  <div class="hero-inner">
+    
+    <h1>Profile & Settings<br><em>Actions for You</em></h1>
+    <p class="hero-desc">A smart recommendation area within the Bank Profile & Settings experience that surfaces the most relevant actions for each customer — from security setup to privacy reviews. I led the UX research and strategy to define how recommendations should be prioritized, displayed, and managed.</p>
+  
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- MY ROLE -->
+  <div class="sec">
+    <div class="sec-eyebrow">My role</div>
+    <h2>What I was responsible for</h2>
+    <div class="role-box">
+      <div class="role-col"><div class="rc-label">Role type</div><div class="rc-val">UX Research & Strategy</div></div>
+      <div class="role-col"><div class="rc-label">Methods used</div><div class="rc-val">Experience review, workflow analysis, scenario analysis, stakeholder discussions</div></div>
+      <div class="role-col"><div class="rc-label">Deliverables</div><div class="rc-val">5 findings, 5 recommendations, priority framework, decision matrix, lifecycle rules, user flows, UI screens</div></div>
+    </div>
+  </div>
+
+  <div class="rule"></div>
+
+  
+
+  <!-- PROBLEM -->
+  <div class="sec">
+    <div class="sec-eyebrow">The problem</div>
+    <h2>Too many actions, no clear priority</h2>
+    <p>Users could have many eligible actions simultaneously. Without a prioritization system the recommendation area risked becoming cluttered and overwhelming — the opposite of helpful.</p>
+    <div class="cg">
+      <div class="ccard"><h4>No prioritization logic</h4><p>Security-critical actions appeared alongside optional preferences with no visual difference in importance.</p></div>
+      <div class="ccard"><h4>No lifecycle rules</h4><p>No defined rules for when actions should appear, disappear, or reappear after a user completes or dismisses them.</p></div>
+      <div class="ccard"><h4>No user-type logic</h4><p>New users need onboarding actions. Existing users need maintenance actions. The system treated all users the same.</p></div>
+      <div class="ccard"><h4>Cognitive overload risk</h4><p>Without a cap on displayed recommendations, too many actions at once reduced users' ability to act on any of them.</p></div>
+    </div>
+  </div>
+
+  <div class="rule"></div>
+
+  <!-- RESEARCH -->
+  <div class="sec">
+    <div class="sec-eyebrow">Research approach</div>
+    <h2>UX strategy and experience definition</h2>
+    <div class="cg">
+      <div class="ccard"><h4>Existing experience review</h4><p>Analyzed current Profile & Settings structure and how the recommendation area currently behaves.</p></div>
+      <div class="ccard"><h4>Workflow analysis</h4><p>Examined how recommendations appear, disappear, and reappear based on different user actions.</p></div>
+      <div class="ccard"><h4>Scenario-based analysis</h4><p>Built scenarios across new users, existing users, highly engaged users, empty states, and edge cases.</p></div>
+     
+      <div class="ccard"><h4>Stakeholder discussions</h4><p>Worked with product and UX stakeholders to understand business goals and expected customer journeys.</p></div>
+    </div>
+  </div>
+
+  <div class="rule"></div>
+
+  <!-- FINDINGS -->
+  <div class="sec">
+    <div class="sec-eyebrow">Key findings</div>
+    <h2>Five things the research revealed</h2>
+    <div class="finding"><span class="finding-num">1</span><div><h4>Too many actions at once causes clutter</h4><p>Users can have many eligible actions simultaneously. Without prioritization, the recommendation area becomes overwhelming and users cannot identify what to act on first.</p></div></div>
+    <div class="finding"><span class="finding-num">2</span><div><h4>Not all actions are equal</h4><p>Security and required actions carry significantly more importance than optional preferences. The design needs to reflect this hierarchy so users always prioritize the right things.</p></div></div>
+    <div class="finding"><span class="finding-num">3</span><div><h4>Different users need different recommendations</h4><p>A new user needs onboarding actions. An existing user needs maintenance and compliance actions. One-size-fits-all recommendations do not serve either group well.</p></div></div>
+    <div class="finding"><span class="finding-num">4</span><div><h4>Lifecycle rules were undefined</h4><p>No rules for when actions appear, when they disappear after completion, when they reappear, and what replaces a completed action — creating inconsistent and unpredictable behavior.</p></div></div>
+    <div class="finding"><span class="finding-num">5</span><div><h4>Ranking needs to be transparent and consistent</h4><p>Users should always see the most relevant and important actions first. Ranking logic must be consistent across all user types and predictable so users build trust in the system.</p></div></div>
+  </div>
+
+
+
+ <!--   <div class="sec">
+    <div class="sec-eyebrow">User flows</div>
+    <h2>How it works for different users</h2>
+    <p>I created separate user flows for new users and existing users — because their starting states, eligible actions, and recommendation content differ significantly. Each flow was created in Figma and validated with stakeholders.</p>
+
+   <!-- <div class="flow-grid">
+
+      <!-- NEW USER FLOW — label only, no descriptions, text fits inside
+      <div class="flow-diagram">
+        <div class="flow-diagram-title">New user flow</div>
+        <svg viewBox="0 0 260 530" xmlns="http://www.w3.org/2000/svg" style="width:100%" role="img" aria-label="New user flow diagram">
+          <title>New user flow</title>
+         
+          <rect x="80" y="8" width="100" height="26" rx="13" fill="#1A7A6E"/>
+          <text x="130" y="25" text-anchor="middle" dominant-baseline="central" font-size="6.5" font-weight="300" fill="white" font-family="Sora,sans-serif">Start</text>
+       
+          <line x1="130" y1="34" x2="130" y2="52" stroke="#C0D0DC" stroke-width="1.5"/>
+          <polygon points="125,50 130,57 135,50" fill="#C0D0DC"/>
+       
+          <rect x="45" y="57" width="170" height="30" rx="4" fill="#F4F7FB" stroke="#D4E0EC" stroke-width="1"/>
+          <text x="130" y="72" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="500" fill="#0D1B2A" font-family="Sora,sans-serif">Landing Page</text>
+         
+          <line x1="130" y1="87" x2="130" y2="105" stroke="#C0D0DC" stroke-width="1.5"/>
+          <polygon points="125,103 130,110 135,103" fill="#C0D0DC"/>
+     
+          <rect x="45" y="110" width="170" height="30" rx="4" fill="#F4F7FB" stroke="#D4E0EC" stroke-width="1"/>
+          <text x="130" y="125" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="500" fill="#0D1B2A" font-family="Sora,sans-serif">Profile &amp; Settings</text>
+     
+          <line x1="130" y1="140" x2="130" y2="158" stroke="#C0D0DC" stroke-width="1.5"/>
+          <polygon points="125,156 130,163 135,156" fill="#C0D0DC"/>
+         
+          <rect x="45" y="163" width="170" height="30" rx="4" fill="#F4F7FB" stroke="#D4E0EC" stroke-width="1"/>
+          <text x="130" y="178" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="500" fill="#0D1B2A" font-family="Sora,sans-serif">System Evaluates State</text>
+       
+          <line x1="130" y1="193" x2="130" y2="211" stroke="#C0D0DC" stroke-width="1.5"/>
+          <polygon points="125,209 130,216 135,209" fill="#C0D0DC"/>
+          
+          <polygon points="130,216 190,246 130,276 70,246" fill="#FFF8E1" stroke="#E8C97A" stroke-width="1.5"/>
+          <text x="130" y="242" text-anchor="middle" dominant-baseline="central" font-size="7.5" font-weight="600" fill="#7A5010" font-family="Sora,sans-serif">Any Actions</text>
+          <text x="130" y="255" text-anchor="middle" dominant-baseline="central" font-size="7.5" font-weight="600" fill="#7A5010" font-family="Sora,sans-serif">Needed?</text>
+       
+          <line x1="130" y1="276" x2="130" y2="294" stroke="#1A7A6E" stroke-width="1.5"/>
+          <polygon points="125,292 130,299 135,292" fill="#1A7A6E"/>
+          <text x="118" y="289" font-size="7" font-weight="600" fill="#1A7A6E" font-family="Sora,sans-serif">Yes</text>
+       
+          <line x1="190" y1="246" x2="228" y2="246" stroke="#E53E3E" stroke-width="1.5"/>
+          <polygon points="225,241 232,246 225,251" fill="#E53E3E"/>
+          <text x="193" y="242" font-size="7" font-weight="600" fill="#E53E3E" font-family="Sora,sans-serif">No</text>
+         
+          <rect x="228" y="233" width="28" height="26" rx="13" fill="#E53E3E"/>
+          <text x="242" y="246" text-anchor="middle" dominant-baseline="central" font-size="7" font-weight="600" fill="white" font-family="Sora,sans-serif">End</text>
+         
+          <rect x="45" y="299" width="170" height="30" rx="4" fill="#D6EFEC" stroke="#5BB5A8" stroke-width="1.5"/>
+          <text x="130" y="314" text-anchor="middle" dominant-baseline="central" font-size="7.5" font-weight="500" fill="#0E524A" font-family="Sora,sans-serif">Display Top 3 Recommendations</text>
+      
+          <line x1="130" y1="329" x2="130" y2="347" stroke="#C0D0DC" stroke-width="1.5"/>
+          <polygon points="125,345 130,352 135,345" fill="#C0D0DC"/>
+         
+          <polygon points="130,352 190,378 130,404 70,378" fill="#FFF8E1" stroke="#E8C97A" stroke-width="1.5"/>
+          <text x="130" y="374" text-anchor="middle" dominant-baseline="central" font-size="7" font-weight="600" fill="#7A5010" font-family="Sora,sans-serif">User Selects</text>
+          <text x="130" y="387" text-anchor="middle" dominant-baseline="central" font-size="7" font-weight="600" fill="#7A5010" font-family="Sora,sans-serif">Recommendation</text>
+        
+          <line x1="130" y1="404" x2="130" y2="422" stroke="#C0D0DC" stroke-width="1.5"/>
+          <polygon points="125,420 130,427 135,420" fill="#C0D0DC"/>
+       
+          <rect x="45" y="427" width="170" height="30" rx="4" fill="#F4F7FB" stroke="#D4E0EC" stroke-width="1"/>
+          <text x="130" y="442" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="500" fill="#0D1B2A" font-family="Sora,sans-serif">Navigate to Page</text>
+      
+          <line x1="130" y1="457" x2="130" y2="475" stroke="#C0D0DC" stroke-width="1.5"/>
+          <polygon points="125,473 130,480 135,473" fill="#C0D0DC"/>
+          
+          <rect x="45" y="480" width="170" height="30" rx="15" fill="#1A7A6E"/>
+          <text x="130" y="495" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="white" font-family="Sora,sans-serif">Complete Action</text>
+        </svg>
+      </div>
+
+      
+      <div class="flow-diagram">
+        <div class="flow-diagram-title">Existing user flow</div>
+        <svg viewBox="0 0 260 530" xmlns="http://www.w3.org/2000/svg" style="width:100%" role="img" aria-label="Existing user flow diagram">
+          <title>Existing user flow</title>
+         
+          <rect x="80" y="8" width="100" height="26" rx="13" fill="#1A7A6E"/>
+          <text x="130" y="25" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="white" font-family="Sora,sans-serif">Start</text>
+         
+          <line x1="130" y1="34" x2="130" y2="52" stroke="#C0D0DC" stroke-width="1.5"/>
+          <polygon points="125,50 130,57 135,50" fill="#C0D0DC"/>
+      
+          <rect x="45" y="57" width="170" height="30" rx="4" fill="#F4F7FB" stroke="#D4E0EC" stroke-width="1"/>
+          <text x="130" y="72" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="500" fill="#0D1B2A" font-family="Sora,sans-serif">Landing Page</text>
+         
+          <line x1="130" y1="87" x2="130" y2="105" stroke="#C0D0DC" stroke-width="1.5"/>
+          <polygon points="125,103 130,110 135,103" fill="#C0D0DC"/>
+       
+          <rect x="45" y="110" width="170" height="30" rx="4" fill="#F4F7FB" stroke="#D4E0EC" stroke-width="1"/>
+          <text x="130" y="125" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="500" fill="#0D1B2A" font-family="Sora,sans-serif">Profile &amp; Settings</text>
+        
+          <line x1="130" y1="140" x2="130" y2="158" stroke="#C0D0DC" stroke-width="1.5"/>
+          <polygon points="125,156 130,163 135,156" fill="#C0D0DC"/>
+          
+          <rect x="45" y="163" width="170" height="30" rx="4" fill="#F4F7FB" stroke="#D4E0EC" stroke-width="1"/>
+          <text x="130" y="178" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="500" fill="#0D1B2A" font-family="Sora,sans-serif">System Evaluates State</text>
+          
+          <line x1="130" y1="193" x2="130" y2="211" stroke="#C0D0DC" stroke-width="1.5"/>
+          <polygon points="125,209 130,216 135,209" fill="#C0D0DC"/>
+        
+          <polygon points="130,216 190,246 130,276 70,246" fill="#FFF8E1" stroke="#E8C97A" stroke-width="1.5"/>
+          <text x="130" y="242" text-anchor="middle" dominant-baseline="central" font-size="7.5" font-weight="600" fill="#7A5010" font-family="Sora,sans-serif">Any Actions</text>
+          <text x="130" y="255" text-anchor="middle" dominant-baseline="central" font-size="7.5" font-weight="600" fill="#7A5010" font-family="Sora,sans-serif">Needed?</text>
+          
+          <line x1="130" y1="276" x2="130" y2="294" stroke="#1A7A6E" stroke-width="1.5"/>
+          <polygon points="125,292 130,299 135,292" fill="#1A7A6E"/>
+          <text x="118" y="289" font-size="7" font-weight="600" fill="#1A7A6E" font-family="Sora,sans-serif">Yes</text>
+        
+          <line x1="190" y1="246" x2="228" y2="246" stroke="#E53E3E" stroke-width="1.5"/>
+          <polygon points="225,241 232,246 225,251" fill="#E53E3E"/>
+          <text x="193" y="242" font-size="7" font-weight="600" fill="#E53E3E" font-family="Sora,sans-serif">No</text>
+          
+          <rect x="228" y="233" width="28" height="26" rx="13" fill="#E53E3E"/>
+          <text x="242" y="246" text-anchor="middle" dominant-baseline="central" font-size="7" font-weight="600" fill="white" font-family="Sora,sans-serif">End</text>
+         
+          <rect x="45" y="299" width="170" height="30" rx="4" fill="#D6EFEC" stroke="#5BB5A8" stroke-width="1.5"/>
+          <text x="130" y="314" text-anchor="middle" dominant-baseline="central" font-size="7.5" font-weight="500" fill="#0E524A" font-family="Sora,sans-serif">Display Top 3 Recommendations</text>
+        
+          <line x1="130" y1="329" x2="130" y2="347" stroke="#C0D0DC" stroke-width="1.5"/>
+          <polygon points="125,345 130,352 135,345" fill="#C0D0DC"/>
+         
+          <polygon points="130,352 190,378 130,404 70,378" fill="#FFF8E1" stroke="#E8C97A" stroke-width="1.5"/>
+          <text x="130" y="374" text-anchor="middle" dominant-baseline="central" font-size="7" font-weight="600" fill="#7A5010" font-family="Sora,sans-serif">User Selects </text>
+          <text x="130" y="387" text-anchor="middle" dominant-baseline="central" font-size="7" font-weight="600" fill="#7A5010" font-family="Sora,sans-serif">Recommendation</text>
+         
+          <line x1="130" y1="404" x2="130" y2="422" stroke="#C0D0DC" stroke-width="1.5"/>
+          <polygon points="125,420 130,427 135,420" fill="#C0D0DC"/>
+         
+          <rect x="45" y="427" width="170" height="30" rx="4" fill="#F4F7FB" stroke="#D4E0EC" stroke-width="1"/>
+          <text x="130" y="442" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="500" fill="#0D1B2A" font-family="Sora,sans-serif">Navigate to Page</text>
+         
+          <line x1="130" y1="457" x2="130" y2="475" stroke="#C0D0DC" stroke-width="1.5"/>
+          <polygon points="125,473 130,480 135,473" fill="#C0D0DC"/>
+        
+          <rect x="45" y="480" width="170" height="30" rx="15" fill="#1A7A6E"/>
+          <text x="130" y="495" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="white" font-family="Sora,sans-serif">Complete Action</text>
+        </svg>
+      </div>
+
+    </div>
+  </div>
+ -->
+
+  <div class="rule"></div>
+  <!-- PRIORITY RULES -->
+  <div class="sec">
+    <div class="sec-eyebrow">Priority framework</div>
+    <h2>10 priority rules that govern all recommendations</h2>
+    <p>These rules determine which of the many eligible actions appear, in what order, and what happens after a user completes or ignores them. They became the foundation for the recommendation engine logic.</p>
+    <table class="ptable">
+      <thead><tr><th>Rule</th><th>Priority</th><th>Logic</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><span class="p-high">High</span></td><td>Security actions have the highest priority</td></tr>
+        <tr><td>2</td><td><span class="p-high">High</span></td><td>Required profile completion actions rank above optional actions</td></tr>
+        <tr><td>3</td><td><span class="p-med">Medium</span></td><td>Privacy, consent, and compliance actions rank next</td></tr>
+        <tr><td>4</td><td><span class="p-med">Medium</span></td><td>Digital adoption actions rank after profile and security actions</td></tr>
+        <tr><td>5</td><td><span class="p-low">Low</span></td><td>Personalization actions have the lowest priority</td></tr>
+        <tr><td>6</td><td><span class="p-na">N/A</span></td><td>If multiple actions share the same priority, the oldest incomplete action ranks higher</td></tr>
+        <tr><td>7</td><td><span class="p-na">N/A</span></td><td>Completed actions are removed immediately from the list</td></tr>
+        <tr><td>8</td><td><span class="p-na">N/A</span></td><td>The next highest-ranked eligible action replaces a completed recommendation</td></tr>
+        <tr><td>9</td><td><span class="p-na">N/A</span></td><td>If fewer than 3 eligible actions exist, only available actions are displayed</td></tr>
+        <tr><td>10</td><td><span class="p-na">N/A</span></td><td>If no eligible actions remain, display the empty state experience</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="rule"></div>
+
+  <!-- SYSTEM BEHAVIOR -->
+  <div class="sec">
+    <div class="sec-eyebrow">System behavior</div>
+    <h2>How the system responds to every user action</h2>
+    <div class="sbgrid">
+      <div class="sbcard">
+        <h5>Completion state</h5>
+        <div class="sb-row"><div class="sb-row-label">Criteria 01</div><div class="sb-row-val">When a user completes a priority activity, it is removed from the eligible activity list</div></div>
+        <div class="sb-row"><div class="sb-row-label">Criteria 02</div><div class="sb-row-val">System re-evaluates all remaining activities against eligibility criteria</div></div>
+        <div class="sb-row"><div class="sb-row-label">Criteria 03</div><div class="sb-row-val">Completed activity is no longer considered during priority assignment and ranking</div></div>
+      </div>
+      <div class="sbcard">
+        <h5>Replacement state</h5>
+        <div class="sb-row"><div class="sb-row-label">Criteria 01</div><div class="sb-row-val">After completion, system automatically identifies the next highest-ranked eligible activity</div></div>
+        <div class="sb-row"><div class="sb-row-label">Criteria 02</div><div class="sb-row-val">Ranking process is re-executed to ensure Top 3 always reflects highest-priority pending actions</div></div>
+        <div class="sb-row"><div class="sb-row-label">Criteria 03</div><div class="sb-row-val">Newly ranked activity replaces the completed activity in the Top 3 list immediately</div></div>
+      </div>
+      <div class="sbcard">
+        <h5>Empty state</h5>
+        <div class="sb-row"><div class="sb-row-label">Criteria 01</div><div class="sb-row-val">All priority activities have been completed by the user</div></div>
+        <div class="sb-row"><div class="sb-row-label">Criteria 02</div><div class="sb-row-val">No activities are applicable to the user's current account type</div></div>
+        <div class="sb-row"><div class="sb-row-label">Criteria 03</div><div class="sb-row-val">All available activities are restricted by current business rules</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rule"></div>
+
+  <!-- LIFECYCLE
+  <div class="sec">
+    <div class="sec-eyebrow">Lifecycle stages</div>
+    <h2>10 stages every recommendation moves through</h2>
+    <p>From the moment a recommendation becomes eligible to when it disappears or reappears — every stage was defined to ensure consistent, predictable behavior across all customer types.</p>
+    <table class="ltable">
+      <thead><tr><th>Stage</th><th>Trigger</th><th>System behavior</th></tr></thead>
+      <tbody>
+        <tr><td>Eligible</td><td>Customer meets recommendation criteria</td><td>Recommendation becomes available for ranking</td></tr>
+        <tr><td>Displayed</td><td>Recommendation ranks within Top 3 eligible actions</td><td>Recommendation is shown to customer</td></tr>
+        <tr><td>Selected</td><td>Customer clicks recommendation</td><td>Customer navigated to the corresponding Profile & Settings page</td></tr>
+        <tr><td>Completed</td><td>Customer successfully completes the action</td><td>Recommendation is removed from the list</td></tr>
+        <tr><td>Refreshed</td><td>Profile, preference, privacy, or security information changes</td><td>Recommendations are recalculated and reranked</td></tr>
+        <tr><td>Replaced</td><td>Displayed recommendation is completed or removed</td><td>Next highest-ranked eligible recommendation is promoted into the slot</td></tr>
+        <tr><td>Reappears</td><td>Previously completed action becomes eligible again (e.g. paperless disabled, privacy review overdue)</td><td>Recommendation is added back into ranking</td></tr>
+        <tr><td>Login refresh</td><td>Customer signs in</td><td>System reevaluates customer state and recommendation eligibility</td></tr>
+        <tr><td>No eligible actions</td><td>All recommendations completed or no actions qualify</td><td>Recommendation list is removed — display empty state</td></tr>
+        <tr><td>Empty state</td><td>No eligible recommendations remain</td><td>Display success/completion state to customer</td></tr>
+      </tbody>
+    </table>
+  </div> -->
+
+
+
+  <!-- RECOMMENDATIONS -->
+  <div class="sec">
+    <div class="sec-eyebrow">Design recommendations</div>
+    <h2>Five recommendations that shaped the product</h2>
+    <div class="rec"><div class="rec-head"><span class="rec-badge">Rec 1</span><h4>Priority Framework</h4></div><p>Three priority tiers — High (security setup, required profile completion), Medium (privacy and compliance), Low (optional personalization) — ensure the most critical actions always surface first.</p></div>
+    <div class="rec"><div class="rec-head"><span class="rec-badge">Rec 2</span><h4>Recommendation Decision Matrix</h4></div><p>Defined customer action, eligibility rules, appearance, disappearance, and reappearance criteria for every action type. This became the foundation for the recommendation engine logic.</p><div class="rec-tags"><span class="rec-tag">Customer action trigger</span><span class="rec-tag">Eligibility rules</span><span class="rec-tag">Appearance criteria</span><span class="rec-tag">Disappearance criteria</span><span class="rec-tag">Reappearance criteria</span></div></div>
+    <div class="rec"><div class="rec-head"><span class="rec-badge">Rec 3</span><h4>Top 3 Recommendation Model</h4></div><p>Display only the three highest-priority eligible actions at any one time. Directly prevents cognitive overload while ensuring the most important actions always have visibility and space to act.</p></div>
+    <div class="rec"><div class="rec-head"><span class="rec-badge">Rec 4</span><h4>Lifecycle & Refresh Rules</h4></div><p>Established clear rules for completion, replacement, refresh, and empty state — ensuring consistent recommendation behavior regardless of what action a user takes.</p><div class="rec-tags"><span class="rec-tag">Action completion</span><span class="rec-tag">Replacement logic</span><span class="rec-tag">Refresh triggers</span><span class="rec-tag">Empty-state handling</span></div></div>
+    <div class="rec"><div class="rec-head"><span class="rec-badge">Rec 5</span><h4>Customer Scenario Framework</h4></div><p>Validated recommendation logic against five user types — new users, existing users, highly engaged users, empty states, and edge cases — to ensure consistency across every customer scenario.</p></div>
+  </div>
+
+  <div class="rule"></div>
+<!--
+  IMPACT 
+  <div class="sec">
+    <div class="sec-eyebrow">Impact</div>
+    <h2>Research that shaped product direction</h2>
+    <p>The research and recommendations gave the product team a clear, evidence-based framework to build the "Actions for You" feature — eliminating ambiguity and aligning all stakeholders on how the recommendation system should work.</p>
+    <div class="outcome-band">
+      <h3>What the project delivered</h3>
+      <div class="og">
+        <div class="oi"><span class="oi-mark">✦</span>Clear prioritization framework for all action types</div>
+        <div class="oi"><span class="oi-mark">✦</span>Decision matrix as foundation for recommendation engine</div>
+        <div class="oi"><span class="oi-mark">✦</span>Top 3 model to prevent cognitive overload</div>
+        <div class="oi"><span class="oi-mark">✦</span>10 priority rules with complete lifecycle definition</div>
+        <div class="oi"><span class="oi-mark">✦</span>Scenario coverage across all user types and edge cases</div>
+        <div class="oi"><span class="oi-mark">✦</span>Stakeholder alignment on UX strategy and direction</div>
+      </div>
+    </div>
+  </div>-->
+<!-- FINAL SCREENS -->
+  <div class="sec">
+    <div class="sec-eyebrow">Final UI screens</div>
+    <h2>What Actions for You looks like</h2>
+    <p>The "Actions for You" section lives at the top of the Profile & Settings page — showing the top 3 highest-priority recommendations for each customer. Below it, all functional settings cards remain accessible.</p>
+
+    <div class="screen-pair">
+      <!-- DESKTOP -->
+      <div class="screen-box">
+        <div class="screen-label">Desktop — Profile & Settings</div>
+        <div class="screen-body">
+          <div class="usb-nav">
+                   <div class="usb-nav-links">
+              <span class="usb-nav-link">Notifications ●</span>
+              <span class="usb-nav-link">Profile & settings ▾</span>
+              <span class="usb-nav-link">Need help? ▾</span>
+              <span class="usb-nav-link">Log out</span>
+            </div>
+          </div>
+          <div class="usb-subnav">
+            <span class="usb-subnav-link">Dashboard</span>
+            <span class="usb-subnav-link">Accounts ▾</span>
+            <span class="usb-subnav-link">Transfer & pay ▾</span>
+            <span class="usb-subnav-link">Plan & track ▾</span>
+            <span class="usb-subnav-link">Products & offers</span>
+          </div>
+          <div class="usb-hero">
+            <div class="usb-hero-title">Profile & settings</div>
+            <div class="usb-hero-user"><div class="usb-hero-avatar">JD</div>Jordan Davis</div>
+            <div class="usb-afy">
+              <div class="usb-afy-label">Actions for you</div>
+              <div class="usb-afy-item">Confirm your primary email<span>›</span></div>
+              <div class="usb-afy-item">Go paperless<span>›</span></div>
+              <div class="usb-afy-item"><span class="usb-new-badge">New</span>Privacy preferences<span>›</span></div>
+            </div>
+          </div>
+          <div class="usb-overview">
+            <div class="usb-ov-label">Overview</div>
+            <div class="usb-grid">
+              <div class="usb-card">
+                <div class="usb-card-icon">👤</div>
+                <div class="usb-card-title">Personal details</div>
+                <div class="usb-card-desc">Update your phone, email or address</div>
+                <div class="usb-card-badge">⚠ Needs attention</div>
+              </div>
+              <div class="usb-card">
+                <div class="usb-card-icon">🌐</div>
+                <div class="usb-card-title">Language preferences</div>
+                <div class="usb-card-desc">Update language and manage accounts</div>
+              </div>
+              <div class="usb-card">
+                <div class="usb-card-icon">🔐</div>
+                <div class="usb-card-title">Login & security</div>
+                <div class="usb-card-desc">Update username or password</div>
+              </div>
+              <div class="usb-card">
+                <div class="usb-card-icon">🔔</div>
+                <div class="usb-card-title">Alerts & notifications</div>
+                <div class="usb-card-desc">Set which alerts and notifications you want</div>
+              </div>
+              <div class="usb-card">
+                <div class="usb-card-icon">📧</div>
+                <div class="usb-card-title">Email Marketing</div>
+                <div class="usb-card-desc">Choose marketing emails you want</div>
+              </div>
+              <div class="usb-card">
+                <div class="usb-card-icon">📄</div>
+                <div class="usb-card-title">Paperless preferences</div>
+                <div class="usb-card-desc">Choose documents to receive digitally</div>
+              </div>
+              <div class="usb-card">
+                <div class="usb-card-icon">🛡️</div>
+                <div class="usb-card-title">Security center</div>
+                <div class="usb-card-desc">Increase your security rating</div>
+              </div>
+              <div class="usb-card">
+                <div class="usb-card-icon">🔗</div>
+                <div class="usb-card-title">Data sharing</div>
+                <div class="usb-card-desc">Track and manage data sharing</div>
+              </div>
+              <div class="usb-card">
+                <div class="usb-card-icon">🔒</div>
+                <div class="usb-card-title">Privacy preferences</div>
+                <div class="usb-card-desc">Exercise your privacy choices</div>
+              </div>
+              <div class="usb-card" style="grid-column:1/2">
+                <div class="usb-card-icon">📊</div>
+                <div class="usb-card-title">Statement format</div>
+                <div class="usb-card-desc">Choose how you receive statements</div>
+              </div>
+            </div> <br><br><br><br><br>
+          </div>
+          <div class="usb-footer">
+            <div class="usb-footer-links">
+              <span class="usb-footer-link">Language preference</span>
+              <span class="usb-footer-link">Privacy pledge</span>
+              <span class="usb-footer-link">Legal agreements</span>
+              <span class="usb-footer-link">Accessibility</span>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+
+      <!-- MOBILE -->
+      <div class="screen-box">
+        <div class="screen-label">Mobile — Profile & Settings</div>
+        <div class="screen-body" style="padding:12px">
+          <div class="mob-screen">
+            <div class="mob-statusbar"><span>9:41</span><span>●●●</span></div>
+            <div class="mob-hero">
+              <div class="mob-back">← Profile & settings</div>
+              <div class="mob-title">Profile & settings</div>
+              <div class="mob-user"><div style="width:14px;height:14px;border-radius:50%;background:var(--teal);display:inline-flex;align-items:center;justify-content:center;font-size:7px;color:white;font-weight:600">JD</div> Jordan Davis</div>
+              <div class="mob-afy">
+                <div class="mob-afy-label">Actions for you</div>
+                <div class="mob-afy-row">Confirm your primary email<span>›</span></div>
+                <div class="mob-afy-row">Go paperless<span>›</span></div>
+                <div class="mob-afy-row"><span class="usb-new-badge" style="margin-right:4px">New</span>Privacy preferences<span>›</span></div>
+              </div>
+            </div>
+            <div class="mob-body">
+              <div class="mob-ov-label">Overview</div>
+              <div class="mob-list-item">
+                <div><div>Personal details ›</div><div class="mob-list-desc">Update your phone, email or address</div><div class="mob-needs">⚠ Needs attention</div></div>
+              </div>
+              <div class="mob-list-item"><div><div>Language preferences ›</div><div class="mob-list-desc">Update language and manage accounts</div></div></div>
+              <div class="mob-list-item"><div><div>Login preferences ›</div><div class="mob-list-desc">Update username or password</div></div></div>
+              <div class="mob-list-item"><div><div>Alerts & notifications ›</div><div class="mob-list-desc">Set which alerts you want</div></div></div>
+              <div class="mob-list-item"><div><div>Email Marketing Preferences ›</div><div class="mob-list-desc">Choose marketing emails</div></div></div>
+              <div class="mob-list-item"><div><div>Paperless preferences ›</div><div class="mob-list-desc">Choose documents to receive digitally</div></div></div>
+              <div class="mob-list-item"><div><div>Security center ›</div><div class="mob-list-desc">Increase your security rating</div></div></div>
+              <div class="mob-list-item"><div><div>Data sharing ›</div><div class="mob-list-desc">Track and manage data sharing</div></div></div>
+              <div class="mob-list-item"><div><div>Privacy preferences ›</div><div class="mob-list-desc">Exercise your privacy choices</div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Annotation -->
+    <div style="background:var(--teal-l);border:1px solid var(--teal-m);border-radius:var(--r);padding:14px 18px;margin-top:12px;font-size:13px;color:#0A3D36">
+      <strong>UX note:</strong> The "Actions for You" section maintains a clear balance between the user's primary functional goal (updating profile settings) and the system's recommended actions. Actions are shown at the top but do not dominate the page — the full settings overview remains equally accessible below.
+    </div>
+  </div>
+
+  <div class="rule"></div>
+</div>
+<!-- Floating Back Button -->
+<a href="index.html" title="Back to Portfolio" style="
+  position: fixed;
+  bottom: 36px;
+  left: 36px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #0F2340;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  box-shadow: 0 4px 20px rgba(0,0,72,0.35);
+  z-index: 999;
+  transition: transform 0.2s, box-shadow 0.2s;
+  font-size: 20px;
+"
+onmouseover="this.style.transform='scale(1.12)';this.style.boxShadow='0 8px 28px rgba(0,0,72,0.45)'"
+onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 4px 20px rgba(0,0,72,0.35)'"
+>
+  &#8592;
+</a>
+</body>
+</html>
+
