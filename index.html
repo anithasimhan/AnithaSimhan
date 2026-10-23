@@ -51,7 +51,7 @@ nav {
 .nav-links { display: flex; gap: 32px; list-style: none; }
 .nav-links a {
   font-size: 13px; font-weight: 500; letter-spacing: 0.06em;
-  text-transform: uppercase; text-decoration: none;
+  text-transform: none; text-decoration: none;
   color: var(--muted); transition: color 0.2s;
 }
 .nav-links a:hover { color: var(--green); }
@@ -71,6 +71,7 @@ nav {
   overflow: hidden;
   position: relative;
 }
+
 .pf-photo-wrap img {
   position: absolute;
   top: -5%;
@@ -91,14 +92,14 @@ nav {
 .pf-body { padding: 0 24px 24px; }
 .pf-skills-label {
   font-size: 10px; font-weight: 600; letter-spacing: 0.14em;
-  text-transform: uppercase; color: #3a3a6e; margin-bottom: 12px;
+  text-transform: none; color: #3a3a6e; margin-bottom: 12px;
 }
-  
 .pf-skill-tag {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-width: 100px;
+
   gap: 6px;
   background: #F2F2F2;
   color: #000048;
@@ -108,20 +109,17 @@ nav {
   border-radius: 100px;
   border: 1px solid rgba(0,0,72,0.10);
 }
-  
 .pf-skills-wrap {
   display: flex;
   flex-wrap: wrap;
   gap: 10px; /* horizontal and vertical spacing */
 }
-  
 /* HERO */
 .hero {
   min-height: 100vh;
   padding: 120px 60px 60px;
   position: relative;
 }
-  
 .hero::before {
   content: '';
   position: absolute; top: -200px; right: -200px;
@@ -129,7 +127,6 @@ nav {
   background: radial-gradient(circle, rgba(82,183,136,0.12) 0%, transparent 65%);
   border-radius: 50%; pointer-events: none;
 }
-  
 .hero-container {
   max-width: 1100px;
   margin: 0 auto;
@@ -139,12 +136,10 @@ nav {
   align-items: center;
   justify-content: space-between;
 }
-  
 .hero-left {
   flex: 1;
   min-width: 0;
 }
-  
 .hero h1 {
   font-family: 'Cormorant Garamond', serif;
   font-size: clamp(44px, 5.5vw, 68px);
@@ -152,30 +147,25 @@ nav {
   letter-spacing: -0.02em; color: var(--ink);
   margin-bottom: 12px;
 }
-  
 .name-highlight {
   color: var(--green); font-style: italic; position: relative;
   display: inline-block;
 }
-  
 .name-highlight::after {
   content: '';
   position: absolute; bottom: 2px; left: 0; right: 0;
   height: 3px; background: var(--green-pale);
   border-radius: 2px; z-index: -1;
 }
-  
 .hero-tagline {
   font-size: 20px; font-weight: 300;
   color: var(--ink2); margin-bottom: 24px;
   font-style: italic; font-family: 'Cormorant Garamond', serif;
 }
-  
 .hero-desc {
   font-size: 15px; color: var(--ink2); line-height: 1.75;
   margin-bottom: 36px; max-width: 560px;
 }
-  
 .hero-cta { display: flex; gap: 16px; flex-wrap: wrap; }
 
 .btn-primary {
@@ -184,7 +174,6 @@ nav {
   font-size: 14px; font-weight: 500; text-decoration: none;
   transition: background 0.2s, transform 0.15s;
 }
-  
 .btn-primary:hover { background: #245740; transform: translateY(-2px); }
 
 .btn-outline {
@@ -355,7 +344,10 @@ nav {
       color: var(--green);
     }
 
+    .eyebrow::before {
+      content: none;
     
+    }
 
 /* ABOUT — Beyond the Screens */
 .about-section {
@@ -565,13 +557,13 @@ footer p { font-size: 12px; color: rgba(255,255,255,0.3); }
 .eyebrow {
   display: inline-flex;
   align-items: center;
-  gap: 0;
+  gap: 10px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-weight: 600;
+  color: var(--green);
 }
-
-.eyebrow::before {
-  content: none;
-}
-
 .hero-copy h1 {
   font-family: 'Cormorant Garamond', serif;
   font-size: clamp(3.2rem, 6vw, 6rem);
@@ -719,6 +711,7 @@ footer p { font-size: 12px; color: rgba(255,255,255,0.3); }
   border:1px solid #ddd;
   border-radius:999px;
 }
+
     .about-wrap {
       display: grid;
       grid-template-columns: 0.9fr 1.1fr;
@@ -736,7 +729,6 @@ footer p { font-size: 12px; color: rgba(255,255,255,0.3); }
       flex-direction: column;
       justify-content: center;
     }
-
     .about-quote {
       font-family: 'Cormorant Garamond', serif;
       font-size: clamp(2rem, 3vw, 2.8rem);
@@ -745,7 +737,6 @@ footer p { font-size: 12px; color: rgba(255,255,255,0.3); }
       color: var(--ink);
       margin-bottom: 18px;
     }
-
     .about-quote em {
       color: var(--green);
       font-style: italic;
@@ -807,6 +798,7 @@ footer p { font-size: 12px; color: rgba(255,255,255,0.3); }
           <span class="pf-skill-tag"> <!--🖥 --> Reliable</span>
           <span class="pf-skill-tag"> <!--✅ --> Adaptable</span>
 <span class="pf-skill-tag"> <!--✅ --> Proactive</span>
+
 <span class="pf-skill-tag"> <!--✅ --> Grounded</span>
         </div>
       </div>
@@ -842,7 +834,7 @@ footer p { font-size: 12px; color: rgba(255,255,255,0.3); }
       <!-- 1. IDM -->
       <article class="pj-card">
 <span class="pj-tag">Access Platform</span>
-        <div class="pj-text">
+      <br><br>  <div class="pj-text">
 
           <h3 class="pj-name">IDM</h3>
           <p class="pj-desc">An application for the users to certify and manage user access permissions.</p>
@@ -872,7 +864,7 @@ footer p { font-size: 12px; color: rgba(255,255,255,0.3); }
         <div class="pj-text">
 
           <h3 class="pj-name">C-Ahead</h3>
-          <p class="pj-desc">Career progression job portal<br> for Hiring Managers &amp; Associates within Cognizant.</p>
+          <p class="pj-desc">Career progression job portal for Hiring Managers &amp; Associates within Cognizant.</p>
           <a class="pj-view" href="Testc.html">View Project <span class="pj-arrow" aria-hidden="true">&rarr;</span></a>
         </div>
         <!-- add the C-Ahead image path in src -->
@@ -884,8 +876,8 @@ footer p { font-size: 12px; color: rgba(255,255,255,0.3); }
 <span class="pj-tag">UX Research &amp; Strategy</span>
         <div class="pj-text">
           <h3 class="pj-name">Profile & Settings</h3>
-          <p class="pj-desc">UX strategy and priority logic <br>for a banking recommendation area. </p>
-          <a class="pj-view" href="ps (1).html">View Project <span class="pj-arrow" aria-hidden="true">&rarr;</span></a>
+          <p class="pj-desc">UX strategy and priority logic for a banking recommendation area. </p>
+          <a class="pj-view" href="ps.html">View Project <span class="pj-arrow" aria-hidden="true">&rarr;</span></a>
         </div>
         <!-- add the Bima Pathshala image path in src -->
         <div class="pj-shot"><img src="PS.png" alt="Profile & Settings" onerror="this.remove()"></div>
@@ -897,7 +889,7 @@ footer p { font-size: 12px; color: rgba(255,255,255,0.3); }
         <div class="pj-text">
 
           <h3 class="pj-name">DESIGN SYSTEM</h3>
-          <p class="pj-desc">A library of ready-to-use components for faster, <br>consistent product delivery.</p>
+          <p class="pj-desc">A library of ready-to-use components for faster, consistent product delivery.</p>
           <a class="pj-view" href="moment-design-system.html">View Project <span class="pj-arrow" aria-hidden="true">&rarr;</span></a>
         </div>
         <!-- add the Profile & Settings image path in src -->
@@ -918,7 +910,7 @@ footer p { font-size: 12px; color: rgba(255,255,255,0.3); }
  <!--   <p class="section-desc">I work across the full design process — from understanding users to delivering tested, ready-to-use designs. These are the skills and tools I use to get there.</p>-->
     <div class="skills-grid reveal">
     <div class="skill-card">
-    <span class="skill-icon">👤</span>
+    <span class="skill-icon">🔍</span>
     <div class="skill-name">User Interviews</div>
 </div>
 
@@ -953,7 +945,7 @@ footer p { font-size: 12px; color: rgba(255,255,255,0.3); }
 </div>
 
 <div class="skill-card">
-    <span class="skill-icon">👥</span>
+    <span class="skill-icon">🤝</span>
     <div class="skill-name">Collaboration</div>
 </div>
 
