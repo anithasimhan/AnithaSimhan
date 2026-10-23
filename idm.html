@@ -262,7 +262,7 @@ nav {
 .nav-links { display: flex; gap: 32px; list-style: none; }
 .nav-links a {
   font-size: 13px; font-weight: 500; letter-spacing: 0.06em;
-  text-transform: uppercase; text-decoration: none;
+  text-transform: none; text-decoration: none;
   color: var(--muted); transition: color 0.2s;
 }
 .nav-links a:hover { color: var(--green); }
@@ -598,7 +598,7 @@ nav {
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
 </script>
 <!-- Floating Back Button -->
-<a href="index.html" title="Back to Portfolio" style="
+<a href="index.html#work" title="Back to Portfolio" style="
   position: fixed;
   bottom: 36px;
   left: 36px;
